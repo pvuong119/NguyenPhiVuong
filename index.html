@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="Nguyễn Phi Vương — SEO & Web Developer chuyên Technical SEO, Website Development, Shopify, Website Rebuild và Automation.">
+
+    <meta name="keywords"
+        content="Nguyễn Phi Vương, SEO, Technical SEO, Web Developer, Shopify, Shopify Liquid, Website Development, Website Rebuild, ReactJS, Java, Spring Boot">
+
+    <meta name="theme-color" content="#07090d">
+
+    <title>Nguyễn Phi Vương — SEO & Web Developer</title>
+
+    <!-- =========================
+         FONT
+    ========================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- =========================
+         TAILWIND
+    ========================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Manrope', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            margin: 0;
+            background: #07090d;
+            color: #f5f7fb;
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        textarea {
+            font-family: inherit;
+        }
+
+        ::selection {
+            background: #5b8cff;
+            color: white;
+        }
+
+
+        /* =====================================================
+           SCROLLBAR
+        ===================================================== */
+
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #07090d;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #202734;
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #344055;
+        }
+
+
+        /* =====================================================
+           BACKGROUND
+        ===================================================== */
+
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+
+            background-size: 56px 56px;
+
+            mask-image: linear-gradient(
+                to bottom,
+                black 0%,
+                black 65%,
+                transparent 100%
+            );
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 550px;
+            height: 550px;
+            right: -180px;
+            top: 50px;
+            border-radius: 50%;
+            background: rgba(59, 110, 255, .10);
+            filter: blur(120px);
+            pointer-events: none;
+        }
+
+        .hero-glow-small {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            left: -120px;
+            bottom: 50px;
+            border-radius: 50%;
+            background: rgba(89, 70, 255, .06);
+            filter: blur(100px);
+            pointer-events: none;
+        }
+
+
+        /* =====================================================
+           GRADIENT
+        ===================================================== */
+
+        .gradient-text {
+            background:
+                linear-gradient(
+                    105deg,
+                    #ffffff 10%,
+                    #b8caff 48%,
+                    #5b8cff 100%
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+
+        /* =====================================================
+           GLASS
+        ===================================================== */
+
+        .glass {
+            background: rgba(13, 17, 24, .72);
+            border: 1px solid rgba(255,255,255,.07);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+            background: rgba(7,9,13,.72);
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            transition: .3s ease;
+        }
+
+        .nav-link {
+            position: relative;
+            color: #626b7b;
+            transition: .25s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #ffffff;
+        }
+
+        .nav-link.active::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -9px;
+            width: 4px;
+            height: 4px;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            background: #5b8cff;
+            box-shadow: 0 0 12px rgba(91,140,255,.9);
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ===================================================== */
+
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+            color: #07090d;
+            transition:
+                transform .3s ease,
+                box-shadow .3s ease;
+        }
+
+        .btn-primary::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                110deg,
+                transparent 25%,
+                rgba(91,140,255,.25),
+                transparent 75%
+            );
+            transform: translateX(-120%);
+            transition: .65s ease;
+        }
+
+        .btn-primary:hover::before {
+            transform: translateX(120%);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 40px rgba(91,140,255,.16);
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(255,255,255,.025);
+            color: #d7dbe3;
+            transition: .3s ease;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            border-color: rgba(91,140,255,.35);
+            background: rgba(91,140,255,.06);
+        }
+
+
+        /* =====================================================
+           REVEAL
+        ===================================================== */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition:
+                opacity .8s ease,
+                transform .8s cubic-bezier(.16,1,.3,1);
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,.07);
+            background: rgba(13,17,24,.68);
+            transition:
+                transform .4s cubic-bezier(.16,1,.3,1),
+                border-color .35s ease,
+                box-shadow .35s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(91,140,255,.28);
+            box-shadow: 0 25px 70px rgba(0,0,0,.28);
+        }
+
+
+        /* =====================================================
+           PROJECT
+        ===================================================== */
+
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,.07);
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(18,23,32,.92),
+                    rgba(10,13,18,.92)
+                );
+
+            transition:
+                transform .45s cubic-bezier(.16,1,.3,1),
+                border-color .4s ease,
+                box-shadow .4s ease;
+        }
+
+        .project-card::before {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            top: -250px;
+            right: -220px;
+            border-radius: 50%;
+            background: rgba(91,140,255,.09);
+            filter: blur(80px);
+            opacity: 0;
+            transition: .5s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-7px);
+            border-color: rgba(91,140,255,.3);
+            box-shadow: 0 30px 80px rgba(0,0,0,.32);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+
+        /* =====================================================
+           NUMBER
+        ===================================================== */
+
+        .section-number {
+            font-size: 11px;
+            letter-spacing: .2em;
+            font-weight: 800;
+            color: #5b8cff;
+        }
+
+
+        /* =====================================================
+           TAG
+        ===================================================== */
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 11px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.035);
+            border: 1px solid rgba(255,255,255,.055);
+            color: #697383;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           CONTACT INPUT
+        ===================================================== */
+
+        .form-field {
+            width: 100%;
+            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(255,255,255,.025);
+            color: #ffffff;
+            border-radius: 14px;
+            padding: 15px 16px;
+            outline: none;
+            transition:
+                border-color .25s ease,
+                background .25s ease,
+                box-shadow .25s ease;
+        }
+
+        .form-field::placeholder {
+            color: #4f5867;
+        }
+
+        .form-field:hover {
+            border-color: rgba(255,255,255,.13);
+        }
+
+        .form-field:focus {
+            border-color: rgba(91,140,255,.55);
+            background: rgba(91,140,255,.035);
+            box-shadow: 0 0 0 4px rgba(91,140,255,.07);
+        }
+
+        textarea.form-field {
+            min-height: 145px;
+            resize: vertical;
+        }
+
+        .field-error {
+            border-color: rgba(248,113,113,.65) !important;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 7px;
+            color: #f87171;
+            font-size: 11px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+
+        /* =====================================================
+           SUBMIT
+        ===================================================== */
+
+        .submit-button {
+            width: 100%;
+            border: 0;
+            cursor: pointer;
+            border-radius: 14px;
+            padding: 15px 20px;
+            background: #ffffff;
+            color: #07090d;
+            font-weight: 800;
+            transition: .3s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 40px rgba(91,140,255,.15);
+        }
+
+        .submit-button:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+
+        /* =====================================================
+           MOBILE MENU
+        ===================================================== */
+
+        .mobile-menu {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition:
+                max-height .35s ease,
+                opacity .25s ease;
+        }
+
+        .mobile-menu.open {
+            max-height: 400px;
+            opacity: 1;
+        }
+
+
+        /* =====================================================
+           FLOATING CONTACT
+        ===================================================== */
+
+        .floating-contact {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 40;
+        }
+
+        .floating-contact a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.1);
+            backdrop-filter: blur(15px);
+            color: white;
+            transition: .3s ease;
+        }
+
+        .floating-contact a:hover {
+            transform: translateY(-4px);
+            background: rgba(91,140,255,.15);
+            border-color: rgba(91,140,255,.4);
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 768px) {
+
+            .grid-bg {
+                background-size: 38px 38px;
+            }
+
+            .hero-glow {
+                width: 300px;
+                height: 300px;
+                right: -140px;
+            }
+
+            .hero-glow-small {
+                width: 180px;
+                height: 180px;
+            }
+
+            .floating-contact {
+                right: 14px;
+                bottom: 14px;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- NOISE -->
+    <div class="fixed inset-0 pointer-events-none opacity-[.018] z-[100]"
+        style="background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22180%22 height=%22180%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%22.8%22 numOctaves=%224%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');">
+    </div>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <header id="navbar" class="navbar fixed top-0 left-0 right-0 z-50">
+
+        <nav class="max-w-7xl mx-auto px-6 lg:px-10">
+
+            <div class="h-[76px] flex items-center justify-between">
+
+                <!-- LOGO -->
+
+                <a href="#home"
+                    class="font-extrabold text-sm sm:text-base tracking-[-.04em]">
+                    NGUYỄN PHI VƯƠNG
+                </a>
+
+
+                <!-- DESKTOP NAV -->
+
+                <div class="hidden md:flex items-center gap-8 text-xs font-bold">
+
+                    <a href="#home" class="nav-link active">
+                        Home
+                    </a>
+
+                    <a href="#about" class="nav-link">
+                        About
+                    </a>
+
+                    <a href="#skills" class="nav-link">
+                        Skills
+                    </a>
+
+                    <a href="#work" class="nav-link">
+                        Work
+                    </a>
+
+                    <a href="#experience" class="nav-link">
+                        Experience
+                    </a>
+
+                </div>
+
+
+                <!-- DESKTOP CONTACT -->
+
+                <a href="#contact"
+                    class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/[.08] text-xs font-bold text-gray-300 hover:text-white hover:border-blue-400/40 transition">
+
+                    Let's talk
+
+                    <span class="text-blue-400">
+                        ↗
+                    </span>
+
+                </a>
+
+
+                <!-- MOBILE BUTTON -->
+
+                <button id="menuButton"
+                    aria-label="Mở menu"
+                    class="md:hidden w-10 h-10 rounded-full border border-white/[.08] flex items-center justify-center text-gray-400">
+
+                    <span id="menuIcon">
+                        ☰
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <!-- MOBILE MENU -->
+
+            <div id="mobileMenu" class="mobile-menu md:hidden">
+
+                <div class="py-5 border-t border-white/[.06] space-y-1">
+
+                    <a href="#home"
+                        class="mobile-link block px-4 py-3 rounded-xl text-sm font-semibold text-gray-400 hover:bg-white/[.03] hover:text-white">
+                        Home
+                    </a>
+
+                    <a href="#about"
+                        class="mobile-link block px-4 py-3 rounded-xl text-sm font-semibold text-gray-400 hover:bg-white/[.03] hover:text-white">
+                        About
+                    </a>
+
+                    <a href="#skills"
+                        class="mobile-link block px-4 py-3 rounded-xl text-sm font-semibold text-gray-400 hover:bg-white/[.03] hover:text-white">
+                        Skills
+                    </a>
+
+                    <a href="#work"
+                        class="mobile-link block px-4 py-3 rounded-xl text-sm font-semibold text-gray-400 hover:bg-white/[.03] hover:text-white">
+                        Work
+                    </a>
+
+                    <a href="#experience"
+                        class="mobile-link block px-4 py-3 rounded-xl text-sm font-semibold text-gray-400 hover:bg-white/[.03] hover:text-white">
+                        Experience
+                    </a>
+
+                    <a href="#contact"
+                        class="mobile-link block px-4 py-3 mt-2 rounded-xl bg-white text-black text-sm font-bold">
+                        Contact
+                    </a>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section id="home"
+        class="relative min-h-screen flex items-center overflow-hidden">
+
+        <div class="absolute inset-0 grid-bg"></div>
+
+        <div class="hero-glow"></div>
+        <div class="hero-glow-small"></div>
+
+
+        <div class="relative max-w-7xl mx-auto px-6 lg:px-10 w-full pt-32 pb-20">
+
+            <div class="max-w-5xl">
+
+                <!-- STATUS -->
+
+                <div class="reveal flex items-center gap-3 mb-8">
+
+                    <span class="relative flex w-2.5 h-2.5">
+
+                        <span class="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-50"></span>
+
+                        <span class="relative w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+
+                    </span>
+
+                    <span class="text-[10px] sm:text-xs font-bold tracking-[.18em] uppercase text-gray-600">
+                        SEO · WEB · SHOPIFY · AUTOMATION
+                    </span>
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <h1 class="whitespace-nowrap text-[clamp(2.8rem,7.5vw,8rem)] font-black tracking-[-0.06em] leading-none">
+    Nguyễn Phi <span class="gradient-text">Vương.</span>
+</h1>
+
+
+                <!-- ROLE -->
+
+                <div class="reveal mt-9 flex flex-wrap items-center gap-3">
+
+                    <span class="text-xl sm:text-2xl font-extrabold">
+                        SEO & Web Developer
+                    </span>
+
+                    <span class="text-gray-700">
+                        /
+                    </span>
+
+                    <span class="text-sm sm:text-base text-gray-500 font-semibold">
+                        Website · Shopify · SEO
+                    </span>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <p class="reveal mt-7 max-w-3xl text-base sm:text-lg lg:text-xl leading-8 lg:leading-9 text-gray-500">
+
+                    Tôi trực tiếp xây dựng, rebuild và tối ưu website —
+                    kết hợp
+                    <strong class="text-gray-200">
+                        Web Development
+                    </strong>,
+                    <strong class="text-gray-200">
+                        Technical SEO
+                    </strong>,
+                    Shopify và Automation.
+
+                </p>
+
+
+                <!-- HIGHLIGHT -->
+
+                <div class="reveal mt-6 border-l border-blue-500/40 pl-5 max-w-2xl">
+
+                    <p class="text-sm sm:text-base leading-7 text-gray-500">
+
+                        Trực tiếp phụ trách
+                        <strong class="text-blue-300">
+                            3 website thực tế
+                        </strong>,
+
+                        trong đó
+                        <strong class="text-white">
+                            rebuild hoàn toàn Texas Glass Door.
+                        </strong>
+
+                    </p>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="reveal mt-10 flex flex-col sm:flex-row gap-3">
+
+                    <a href="#work"
+                        class="btn-primary inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full text-sm font-extrabold">
+
+                        Xem dự án
+
+                        <span class="relative z-10 text-blue-500">
+                            ↓
+                        </span>
+
+                    </a>
+
+
+                    <a href="#contact"
+                        class="btn-secondary inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full text-sm font-bold">
+
+                        Liên hệ
+
+                        <span class="text-blue-400">
+                            ↗
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <!-- TECH -->
+
+                <div class="reveal mt-16 flex flex-wrap gap-x-7 gap-y-4">
+
+                    <span class="text-xs font-bold text-gray-700">
+                        Technical SEO
+                    </span>
+
+                    <span class="text-xs font-bold text-gray-700">
+                        Shopify
+                    </span>
+
+                    <span class="text-xs font-bold text-gray-700">
+                        Liquid
+                    </span>
+
+                    <span class="text-xs font-bold text-gray-700">
+                        JavaScript
+                    </span>
+
+                    <span class="text-xs font-bold text-gray-700">
+                        ReactJS
+                    </span>
+
+                    <span class="text-xs font-bold text-gray-700">
+                        GA4
+                    </span>
+
+                    <span class="text-xs font-bold text-gray-700">
+                        GTM
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ABOUT
+    ====================================================== -->
+
+    <section id="about"
+        class="py-28 lg:py-36 border-t border-white/[.05]">
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+            <div class="reveal grid lg:grid-cols-[.75fr_1.25fr] gap-14 lg:gap-28">
+
+                <div>
+
+                    <div class="section-number mb-6">
+                        01 / ABOUT
+                    </div>
+
+                    <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-.055em] leading-[.98]">
+
+                        Không chỉ
+                        <span class="gradient-text">
+                            làm code.
+                        </span>
+
+                    </h2>
+
+                </div>
+
+
+                <div class="text-gray-500 text-base sm:text-lg leading-8">
+
+                    <p>
+                        Tôi là
+                        <strong class="text-white">
+                            Nguyễn Phi Vương
+                        </strong>,
+                        định hướng phát triển trong lĩnh vực
+                        <span class="text-gray-300">
+                            SEO và Web Development.
+                        </span>
+                    </p>
+
+                    <p class="mt-6">
+                        Tôi đã trực tiếp phụ trách và triển khai công việc
+                        trên
+                        <strong class="text-white">
+                            3 website thực tế
+                        </strong>
+                        thuộc các lĩnh vực khác nhau.
+                    </p>
+
+                    <p class="mt-6">
+                        Công việc bao gồm Website Development,
+                        Website Rebuild, Technical SEO,
+                        Shopify, optimization,
+                        analytics và automation.
+                    </p>
+
+                    <p class="mt-6">
+                        Dự án nổi bật là
+                        <strong class="text-blue-300">
+                            Texas Glass Door
+                        </strong>,
+                        nơi tôi trực tiếp
+                        <strong class="text-white">
+                            rebuild hoàn toàn website
+                        </strong>
+                        thay vì chỉ thực hiện các chỉnh sửa nhỏ.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- STATS -->
+
+            <div class="reveal mt-20 grid grid-cols-2 lg:grid-cols-4 rounded-3xl overflow-hidden border border-white/[.07]">
+
+                <div class="p-7 sm:p-9 border-b lg:border-b-0 lg:border-r border-white/[.07]">
+
+                    <div class="text-4xl sm:text-5xl font-extrabold tracking-[-.05em]">
+                        03
+                    </div>
+
+                    <p class="mt-3 text-[10px] sm:text-xs font-bold text-gray-600 tracking-wide">
+                        WEBSITE THỰC TẾ
+                    </p>
+
+                </div>
+
+
+                <div class="p-7 sm:p-9 border-b lg:border-b-0 lg:border-r border-white/[.07]">
+
+                    <div class="text-4xl sm:text-5xl font-extrabold tracking-[-.05em]">
+                        01
+                    </div>
+
+                    <p class="mt-3 text-[10px] sm:text-xs font-bold text-gray-600 tracking-wide">
+                        WEBSITE REBUILD
+                    </p>
+
+                </div>
+
+
+                <div class="p-7 sm:p-9 border-r border-white/[.07]">
+
+                    <div class="text-4xl sm:text-5xl font-extrabold tracking-[-.05em]">
+                        SEO
+                    </div>
+
+                    <p class="mt-3 text-[10px] sm:text-xs font-bold text-gray-600 tracking-wide">
+                        TECHNICAL & ON-PAGE
+                    </p>
+
+                </div>
+
+
+                <div class="p-7 sm:p-9">
+
+                    <div class="text-4xl sm:text-5xl font-extrabold tracking-[-.05em]">
+                        E2E
+                    </div>
+
+                    <p class="mt-3 text-[10px] sm:text-xs font-bold text-gray-600 tracking-wide">
+                        END-TO-END WEBSITE
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SKILLS
+    ====================================================== -->
+
+    <section id="skills"
+        class="py-28 lg:py-36 bg-[#090c11] border-y border-white/[.05]">
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+            <div class="reveal mb-14">
+
+                <div class="section-number mb-6">
+                    02 / CAPABILITIES
+                </div>
+
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-.055em]">
+                    Những gì tôi
+                    <span class="gradient-text">
+                        có thể làm.
+                    </span>
+                </h2>
+
+            </div>
+
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+
+                <!-- CARD 01 -->
+
+                <div class="card rounded-3xl p-7 sm:p-8 reveal">
+
+                    <div class="flex justify-between">
+
+                        <span class="section-number">
+                            01
+                        </span>
+
+                        <span class="text-gray-700">
+                            SEO
+                        </span>
+
+                    </div>
+
+                    <h3 class="mt-10 text-xl font-extrabold">
+                        Technical SEO
+                    </h3>
+
+                    <p class="mt-4 text-sm leading-7 text-gray-600">
+                        Crawling, Indexing, Canonical,
+                        Sitemap, Robots.txt,
+                        Schema, 404, 5xx,
+                        Core Web Vitals và cấu trúc website.
+                    </p>
+
+                </div>
+
+
+                <!-- CARD 02 -->
+
+                <div class="card rounded-3xl p-7 sm:p-8 reveal">
+
+                    <div class="flex justify-between">
+
+                        <span class="section-number">
+                            02
+                        </span>
+
+                        <span class="text-gray-700">
+                            WEB
+                        </span>
+
+                    </div>
+
+                    <h3 class="mt-10 text-xl font-extrabold">
+                        Web Development
+                    </h3>
+
+                    <p class="mt-4 text-sm leading-7 text-gray-600">
+                        HTML, CSS, JavaScript,
+                        ReactJS, responsive UI,
+                        website optimization
+                        và rebuild.
+                    </p>
+
+                </div>
+
+
+                <!-- CARD 03 -->
+
+                <div class="card rounded-3xl p-7 sm:p-8 reveal">
+
+                    <div class="flex justify-between">
+
+                        <span class="section-number">
+                            03
+                        </span>
+
+                        <span class="text-gray-700">
+                            SHOPIFY
+                        </span>
+
+                    </div>
+
+                    <h3 class="mt-10 text-xl font-extrabold">
+                        Shopify
+                    </h3>
+
+                    <p class="mt-4 text-sm leading-7 text-gray-600">
+                        Shopify, Shopify Liquid,
+                        theme customization,
+                        structure và technical optimization.
+                    </p>
+
+                </div>
+
+
+                <!-- CARD 04 -->
+
+                <div class="card rounded-3xl p-7 sm:p-8 reveal">
+
+                    <div class="flex justify-between">
+
+                        <span class="section-number">
+                            04
+                        </span>
+
+                        <span class="text-gray-700">
+                            REBUILD
+                        </span>
+
+                    </div>
+
+                    <h3 class="mt-10 text-xl font-extrabold">
+                        Website Rebuild
+                    </h3>
+
+                    <p class="mt-4 text-sm leading-7 text-gray-600">
+                        Phân tích website,
+                        xây dựng lại cấu trúc,
+                        giao diện và tối ưu sau triển khai.
+                    </p>
+
+                </div>
+
+
+                <!-- CARD 05 -->
+
+                <div class="card rounded-3xl p-7 sm:p-8 reveal">
+
+                    <div class="flex justify-between">
+
+                        <span class="section-number">
+                            05
+                        </span>
+
+                        <span class="text-gray-700">
+                            CRM
+                        </span>
+
+                    </div>
+
+                    <h3 class="mt-10 text-xl font-extrabold">
+                        Email Automation
+                    </h3>
+
+                    <p class="mt-4 text-sm leading-7 text-gray-600">
+                        Workflow, Email Automation
+                        và CRM với Zoho,
+                        Klaviyo và Odoo.
+                    </p>
+
+                </div>
+
+
+                <!-- CARD 06 -->
+
+                <div class="card rounded-3xl p-7 sm:p-8 reveal">
+
+                    <div class="flex justify-between">
+
+                        <span class="section-number">
+                            06
+                        </span>
+
+                        <span class="text-gray-700">
+                            DATA
+                        </span>
+
+                    </div>
+
+                    <h3 class="mt-10 text-xl font-extrabold">
+                        Analytics & Tracking
+                    </h3>
+
+                    <p class="mt-4 text-sm leading-7 text-gray-600">
+                        Google Search Console,
+                        GA4, GTM, PageSpeed
+                        và website tracking.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- TECHNOLOGY -->
+
+            <div class="reveal mt-20">
+
+                <div class="text-[10px] font-bold tracking-[.2em] text-gray-700 mb-7">
+                    TECHNOLOGY
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+
+                    <span class="tag">HTML</span>
+                    <span class="tag">CSS</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">ReactJS</span>
+                    <span class="tag">Shopify Liquid</span>
+                    <span class="tag">Java</span>
+                    <span class="tag">Spring Boot</span>
+                    <span class="tag">REST API</span>
+                    <span class="tag">JDBC</span>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">SQL Server</span>
+                    <span class="tag">Git</span>
+                    <span class="tag">GitHub</span>
+                    <span class="tag">Postman</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         WORK
+    ====================================================== -->
+
+    <section id="work"
+        class="py-28 lg:py-36">
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+            <div class="reveal mb-14">
+
+                <div class="section-number mb-6">
+                    03 / SELECTED WORK
+                </div>
+
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-.055em]">
+                    Dự án
+                    <span class="gradient-text">
+                        thực tế.
+                    </span>
+                </h2>
+
+                <p class="mt-5 max-w-2xl text-gray-600 leading-7">
+                    Tập trung vào những dự án tôi trực tiếp triển khai
+                    và xử lý thay vì chỉ liệt kê công nghệ.
+                </p>
+
+            </div>
+
+
+            <!-- TEXAS -->
+
+            <a href="https://texasglassdoor.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-card reveal block rounded-[2rem] p-7 sm:p-10 lg:p-14 mb-5">
+
+                <div class="relative z-10 grid lg:grid-cols-[1fr_auto] gap-10">
+
+                    <div>
+
+                        <div class="section-number">
+                            01 / WEBSITE REBUILD · SEO
+                        </div>
+
+                        <h3 class="mt-7 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-.06em]">
+                            Texas Glass Door
+                        </h3>
+
+                        <p class="mt-6 max-w-3xl text-gray-500 text-base sm:text-lg leading-8">
+
+                            Trực tiếp
+                            <strong class="text-white">
+                                rebuild hoàn toàn website
+                            </strong>
+                            Texas Glass Door.
+
+                            Phụ trách từ cấu trúc website,
+                            giao diện, nội dung,
+                            SEO đến tối ưu và hoàn thiện website.
+
+                        </p>
+
+
+                        <div class="mt-8 flex flex-wrap gap-2">
+
+                            <span class="tag">
+                                Website Rebuild
+                            </span>
+
+                            <span class="tag">
+                                Web Development
+                            </span>
+
+                            <span class="tag">
+                                SEO
+                            </span>
+
+                            <span class="tag">
+                                Optimization
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="lg:pt-2">
+
+                        <span class="inline-flex items-center gap-3 text-sm font-bold text-gray-500">
+
+                            Visit website
+
+                            <span class="text-blue-400 text-lg">
+                                ↗
+                            </span>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- USA -->
+
+            <a href="https://usacabinetsoutlet.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="project-card reveal block rounded-[2rem] p-7 sm:p-10 lg:p-14 mb-5">
+
+                <div class="relative z-10 grid lg:grid-cols-[1fr_auto] gap-10">
+
+                    <div>
+
+                        <div class="section-number">
+                            02 / SHOPIFY · TECHNICAL SEO
+                        </div>
+
+                        <h3 class="mt-7 text-4xl sm:text-5xl font-extrabold tracking-[-.06em]">
+                            USA Cabinets Outlet
+                        </h3>
+
+                        <p class="mt-6 max-w-3xl text-gray-500 text-base sm:text-lg leading-8">
+
+                            Trực tiếp xử lý và tối ưu Shopify website,
+                            bao gồm Technical SEO,
+                            Google Search Console,
+                            crawling, indexing, canonical,
+                            sitemap, robots.txt,
+                            website structure và Shopify Liquid.
+
+                        </p>
+
+
+                        <div class="mt-8 flex flex-wrap gap-2">
+
+                            <span class="tag">
+                                Shopify
+                            </span>
+
+                            <span class="tag">
+                                Liquid
+                            </span>
+
+                            <span class="tag">
+                                Technical SEO
+                            </span>
+
+                            <span class="tag">
+                                GSC
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="lg:pt-2">
+
+                        <span class="inline-flex items-center gap-3 text-sm font-bold text-gray-500">
+
+                            Visit website
+
+                            <span class="text-blue-400 text-lg">
+                                ↗
+                            </span>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- AUTOMATION -->
+
+            <div class="project-card reveal rounded-[2rem] p-7 sm:p-10 lg:p-14">
+
+                <div class="relative z-10 grid lg:grid-cols-2 gap-12">
+
+                    <div>
+
+                        <div class="section-number">
+                            03 / AUTOMATION · CRM
+                        </div>
+
+                        <h3 class="mt-7 text-4xl sm:text-5xl font-extrabold tracking-[-.06em]">
+                            Email Automation
+                        </h3>
+
+                    </div>
+
+
+                    <div>
+
+                        <p class="text-gray-500 text-base sm:text-lg leading-8">
+                            Xây dựng và xử lý workflow liên quan đến
+                            Email Automation và CRM,
+                            làm việc với Zoho,
+                            Klaviyo và Odoo.
+                        </p>
+
+
+                        <div class="mt-8 flex flex-wrap gap-2">
+
+                            <span class="tag">
+                                Zoho
+                            </span>
+
+                            <span class="tag">
+                                Klaviyo
+                            </span>
+
+                            <span class="tag">
+                                Odoo
+                            </span>
+
+                            <span class="tag">
+                                Workflow
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         EXPERIENCE
+    ====================================================== -->
+
+    <section id="experience"
+        class="py-28 lg:py-36 bg-[#090c11] border-y border-white/[.05]">
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+            <div class="reveal grid lg:grid-cols-[.7fr_1.3fr] gap-16 lg:gap-28">
+
+                <div>
+
+                    <div class="section-number mb-6">
+                        04 / EXPERIENCE
+                    </div>
+
+                    <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-.055em] leading-[.95]">
+
+                        Kinh nghiệm
+                        <span class="gradient-text">
+                            thực tế.
+                        </span>
+
+                    </h2>
+
+                </div>
+
+
+                <div>
+
+                    <div class="border-l border-white/[.08] pl-8 pb-16">
+
+                        <div class="text-[10px] font-bold tracking-[.2em] text-blue-400">
+                            2026 — PRESENT
+                        </div>
+
+                        <h3 class="mt-4 text-2xl sm:text-3xl font-extrabold">
+                            SEO · Web · Shopify · Automation
+                        </h3>
+
+
+                        <p class="mt-6 text-gray-500 leading-8">
+                            Trực tiếp phụ trách và triển khai công việc
+                            trên
+                            <strong class="text-white">
+                                3 website thực tế
+                            </strong>
+                            thuộc các lĩnh vực khác nhau.
+                        </p>
+
+
+                        <div class="mt-8 space-y-5 text-sm sm:text-base text-gray-500">
+
+                            <p>
+                                <span class="text-blue-400 mr-2">●</span>
+                                Trực tiếp phụ trách 3 website thực tế.
+                            </p>
+
+                            <p>
+                                <span class="text-blue-400 mr-2">●</span>
+                                Rebuild hoàn toàn website Texas Glass Door.
+                            </p>
+
+                            <p>
+                                <span class="text-blue-400 mr-2">●</span>
+                                Phát triển, chỉnh sửa và tối ưu website.
+                            </p>
+
+                            <p>
+                                <span class="text-blue-400 mr-2">●</span>
+                                Technical SEO: Crawling, Indexing,
+                                Canonical, Sitemap, Robots.txt,
+                                404 và 5xx.
+                            </p>
+
+                            <p>
+                                <span class="text-blue-400 mr-2">●</span>
+                                Shopify & Shopify Liquid.
+                            </p>
+
+                            <p>
+                                <span class="text-blue-400 mr-2">●</span>
+                                Google Search Console, GA4,
+                                GTM và PageSpeed.
+                            </p>
+
+                            <p>
+                                <span class="text-blue-400 mr-2">●</span>
+                                Email Automation & CRM với Zoho,
+                                Klaviyo và Odoo.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="border-l border-white/[.08] pl-8">
+
+                        <div class="text-[10px] font-bold tracking-[.2em] text-gray-700">
+                            DEVELOPMENT BACKGROUND
+                        </div>
+
+                        <h3 class="mt-4 text-2xl sm:text-3xl font-extrabold">
+                            Web & Backend Development
+                        </h3>
+
+                        <p class="mt-6 text-gray-500 leading-8">
+
+                            Nền tảng phát triển phần mềm với
+                            Java, Spring Boot, REST API,
+                            JDBC, MySQL và SQL Server,
+                            bên cạnh HTML, CSS,
+                            JavaScript và ReactJS.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CONTACT
+    ====================================================== -->
+
+    <section id="contact"
+        class="relative py-28 lg:py-36 overflow-hidden">
+
+        <div class="absolute inset-0 pointer-events-none">
+
+            <div class="absolute w-[500px] h-[500px] rounded-full bg-blue-500/[.06] blur-[130px] left-1/2 -translate-x-1/2 top-20">
+            </div>
+
+        </div>
+
+
+        <div class="relative max-w-7xl mx-auto px-6 lg:px-10">
+
+            <div class="grid lg:grid-cols-[.8fr_1.2fr] gap-16 lg:gap-24">
+
+
+                <!-- LEFT -->
+
+                <div class="reveal">
+
+                    <div class="section-number mb-6">
+                        05 / CONTACT
+                    </div>
+
+                    <h2 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-[-.065em] leading-[.9]">
+
+                        Let's build
+
+                        <span class="block gradient-text">
+                            something better.
+                        </span>
+
+                    </h2>
+
+
+                    <p class="mt-8 text-gray-500 leading-8 max-w-md">
+
+                        Có một dự án, vị trí công việc
+                        hoặc muốn trao đổi về website và SEO?
+                        Gửi thông tin cho tôi.
+
+                    </p>
+
+
+                    <!-- DIRECT CONTACT -->
+
+                    <div class="mt-10 space-y-5">
+
+                        <a href="mailto:vuongnpps40933@gmail.com"
+                            class="group flex items-center gap-4">
+
+                            <div class="w-11 h-11 rounded-xl border border-white/[.07] flex items-center justify-center text-gray-500 group-hover:text-blue-400 group-hover:border-blue-400/30 transition">
+                                @
+                            </div>
+
+                            <div>
+
+                                <div class="text-[10px] uppercase tracking-widest text-gray-700 font-bold">
+                                    Email
+                                </div>
+
+                                <div class="mt-1 text-sm font-semibold text-gray-400 group-hover:text-white transition">
+                                    vuongnpps40933@gmail.com
+                                </div>
+
+                            </div>
+
+                        </a>
+
+
+                        <a href="tel:0364556871"
+                            class="group flex items-center gap-4">
+
+                            <div class="w-11 h-11 rounded-xl border border-white/[.07] flex items-center justify-center text-gray-500 group-hover:text-blue-400 group-hover:border-blue-400/30 transition">
+                                ☎
+                            </div>
+
+                            <div>
+
+                                <div class="text-[10px] uppercase tracking-widest text-gray-700 font-bold">
+                                    Phone
+                                </div>
+
+                                <div class="mt-1 text-sm font-semibold text-gray-400 group-hover:text-white transition">
+                                    0364556871
+                                </div>
+
+                            </div>
+
+                        </a>
+
+
+                        <a href="https://www.facebook.com/Pg1501"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="group flex items-center gap-4">
+
+                            <div class="w-11 h-11 rounded-xl border border-white/[.07] flex items-center justify-center text-gray-500 group-hover:text-blue-400 group-hover:border-blue-400/30 transition">
+                                f
+                            </div>
+
+                            <div>
+
+                                <div class="text-[10px] uppercase tracking-widest text-gray-700 font-bold">
+                                    Facebook
+                                </div>
+
+                                <div class="mt-1 text-sm font-semibold text-gray-400 group-hover:text-white transition">
+                                    facebook.com/Pg1501
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RIGHT FORM -->
+
+                <div class="reveal">
+
+                    <div class="glass rounded-[2rem] p-6 sm:p-8 lg:p-10">
+
+                        <div class="mb-8">
+
+                            <h3 class="text-2xl font-extrabold">
+                                Gửi tin nhắn
+                            </h3>
+
+                            <p class="mt-2 text-sm text-gray-600">
+                                Điền thông tin bên dưới, tôi sẽ nhận được nội dung qua email.
+                            </p>
+
+                        </div>
+
+
+                        <form id="contactForm"
+                            novalidate>
+
+
+                            <!-- NAME -->
+
+                            <div class="mb-5">
+
+                                <label
+                                    for="name"
+                                    class="block mb-2 text-xs font-bold text-gray-500">
+                                    Họ và tên
+                                </label>
+
+                                <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    autocomplete="name"
+                                    class="form-field"
+                                    placeholder="Nguyễn Văn A">
+
+                                <div id="nameError"
+                                    class="error-message">
+                                    Vui lòng nhập họ và tên.
+                                </div>
+
+                            </div>
+
+
+                            <!-- EMAIL -->
+
+                            <div class="mb-5">
+
+                                <label
+                                    for="email"
+                                    class="block mb-2 text-xs font-bold text-gray-500">
+                                    Email
+                                </label>
+
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    autocomplete="email"
+                                    class="form-field"
+                                    placeholder="you@example.com">
+
+                                <div id="emailError"
+                                    class="error-message">
+                                    Vui lòng nhập email hợp lệ.
+                                </div>
+
+                            </div>
+
+
+                            <!-- PHONE -->
+
+                            <div class="mb-5">
+
+                                <label
+                                    for="phone"
+                                    class="block mb-2 text-xs font-bold text-gray-500">
+                                    Số điện thoại
+                                    <span class="text-gray-700">
+                                        (không bắt buộc)
+                                    </span>
+                                </label>
+
+                                <input
+                                    id="phone"
+                                    name="phone"
+                                    type="tel"
+                                    autocomplete="tel"
+                                    class="form-field"
+                                    placeholder="0364556871">
+
+                            </div>
+
+
+                            <!-- SUBJECT -->
+
+                            <div class="mb-5">
+
+                                <label
+                                    for="subject"
+                                    class="block mb-2 text-xs font-bold text-gray-500">
+                                    Chủ đề
+                                </label>
+
+                                <select
+                                    id="subject"
+                                    name="subject"
+                                    class="form-field">
+
+                                    <option value="Cơ hội việc làm">
+                                        Cơ hội việc làm
+                                    </option>
+
+                                    <option value="SEO">
+                                        SEO
+                                    </option>
+
+                                    <option value="Website Development">
+                                        Website Development
+                                    </option>
+
+                                    <option value="Shopify">
+                                        Shopify
+                                    </option>
+
+                                    <option value="Khác">
+                                        Khác
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- MESSAGE -->
+
+                            <div class="mb-6">
+
+                                <label
+                                    for="message"
+                                    class="block mb-2 text-xs font-bold text-gray-500">
+                                    Nội dung
+                                </label>
+
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    class="form-field"
+                                    placeholder="Tôi muốn trao đổi với bạn về..."></textarea>
+
+                                <div id="messageError"
+                                    class="error-message">
+                                    Vui lòng nhập nội dung.
+                                </div>
+
+                            </div>
+
+
+                            <!-- STATUS -->
+
+                            <div id="formStatus"
+                                class="hidden mb-5 rounded-xl border border-blue-400/20 bg-blue-400/[.05] px-4 py-3 text-sm text-blue-300">
+                            </div>
+
+
+                            <!-- SUBMIT -->
+
+                            <button
+                                id="submitButton"
+                                type="submit"
+                                class="submit-button">
+
+                                <span id="submitText">
+                                    Gửi tin nhắn ↗
+                                </span>
+
+                            </button>
+
+
+                            <p class="mt-4 text-center text-[10px] leading-5 text-gray-700">
+                                Khi gửi, hệ thống sẽ mở ứng dụng email mặc định
+                                trên thiết bị của bạn.
+                            </p>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="border-t border-white/[.05]">
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 py-8">
+
+            <div class="flex flex-col md:flex-row items-center justify-between gap-5">
+
+                <div>
+
+                    <p class="text-xs font-bold text-gray-600">
+                        NGUYỄN PHI VƯƠNG
+                    </p>
+
+                    <p class="mt-1 text-[10px] text-gray-800">
+                        SEO · WEB · SHOPIFY · AUTOMATION
+                    </p>
+
+                </div>
+
+
+                <div class="flex items-center gap-5 text-xs">
+
+                    <a href="https://texasglassdoor.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-gray-700 hover:text-white transition">
+                        Texas Glass Door ↗
+                    </a>
+
+                    <a href="https://usacabinetsoutlet.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-gray-700 hover:text-white transition">
+                        USA Cabinets Outlet ↗
+                    </a>
+
+                    <a href="https://www.facebook.com/Pg1501"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-gray-700 hover:text-white transition">
+                        Facebook ↗
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         FLOATING PHONE
+    ====================================================== -->
+
+    <div class="floating-contact">
+
+        <a href="tel:0364556871"
+            aria-label="Gọi cho Nguyễn Phi Vương">
+
+            ☎
+
+        </a>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        /* =====================================================
+           MOBILE MENU
+        ====================================================== */
+
+        const menuButton = document.getElementById('menuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+
+        menuButton.addEventListener('click', () => {
+
+            mobileMenu.classList.toggle('open');
+
+            if (mobileMenu.classList.contains('open')) {
+                menuIcon.textContent = '×';
+                menuButton.setAttribute('aria-label', 'Đóng menu');
+            } else {
+                menuIcon.textContent = '☰';
+                menuButton.setAttribute('aria-label', 'Mở menu');
+            }
+
+        });
+
+
+        mobileLinks.forEach(link => {
+
+            link.addEventListener('click', () => {
+
+                mobileMenu.classList.remove('open');
+
+                menuIcon.textContent = '☰';
+
+            });
+
+        });
+
+
+
+        /* =====================================================
+           SCROLL REVEAL
+        ====================================================== */
+
+        const revealElements =
+            document.querySelectorAll('.reveal');
+
+
+        const revealObserver =
+            new IntersectionObserver(
+
+                (entries) => {
+
+                    entries.forEach(entry => {
+
+                        if (entry.isIntersecting) {
+
+                            entry.target.classList.add('show');
+
+                            revealObserver.unobserve(entry.target);
+
+                        }
+
+                    });
+
+                },
+
+                {
+                    threshold: 0.12
+                }
+
+            );
+
+
+        revealElements.forEach(element => {
+
+            revealObserver.observe(element);
+
+        });
+
+
+
+        /* =====================================================
+           ACTIVE NAVIGATION
+        ====================================================== */
+
+        const sections =
+            document.querySelectorAll('section[id]');
+
+        const navLinks =
+            document.querySelectorAll('.nav-link');
+
+
+        const sectionObserver =
+            new IntersectionObserver(
+
+                (entries) => {
+
+                    entries.forEach(entry => {
+
+                        if (entry.isIntersecting) {
+
+                            const id =
+                                entry.target.getAttribute('id');
+
+
+                            navLinks.forEach(link => {
+
+                                link.classList.remove('active');
+
+                                if (
+                                    link.getAttribute('href') ===
+                                    `#${id}`
+                                ) {
+
+                                    link.classList.add('active');
+
+                                }
+
+                            });
+
+                        }
+
+                    });
+
+                },
+
+                {
+                    rootMargin: '-35% 0px -55% 0px'
+                }
+
+            );
+
+
+        sections.forEach(section => {
+
+            sectionObserver.observe(section);
+
+        });
+
+
+
+        /* =====================================================
+           CONTACT FORM
+        ====================================================== */
+
+        const form =
+            document.getElementById('contactForm');
+
+        const submitButton =
+            document.getElementById('submitButton');
+
+        const submitText =
+            document.getElementById('submitText');
+
+        const formStatus =
+            document.getElementById('formStatus');
+
+
+        const nameInput =
+            document.getElementById('name');
+
+        const emailInput =
+            document.getElementById('email');
+
+        const phoneInput =
+            document.getElementById('phone');
+
+        const subjectInput =
+            document.getElementById('subject');
+
+        const messageInput =
+            document.getElementById('message');
+
+
+        function showError(input, errorId) {
+
+            input.classList.add('field-error');
+
+            document
+                .getElementById(errorId)
+                .classList.add('show');
+
+        }
+
+
+        function clearError(input, errorId) {
+
+            input.classList.remove('field-error');
+
+            document
+                .getElementById(errorId)
+                .classList.remove('show');
+
+        }
+
+
+        function validEmail(email) {
+
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+        }
+
+
+        form.addEventListener('submit', function(event) {
+
+            event.preventDefault();
+
+
+            let valid = true;
+
+
+            /* NAME */
+
+            if (nameInput.value.trim() === '') {
+
+                showError(
+                    nameInput,
+                    'nameError'
+                );
+
+                valid = false;
+
+            } else {
+
+                clearError(
+                    nameInput,
+                    'nameError'
+                );
+
+            }
+
+
+            /* EMAIL */
+
+            if (
+                emailInput.value.trim() === '' ||
+                !validEmail(emailInput.value.trim())
+            ) {
+
+                showError(
+                    emailInput,
+                    'emailError'
+                );
+
+                valid = false;
+
+            } else {
+
+                clearError(
+                    emailInput,
+                    'emailError'
+                );
+
+            }
+
+
+            /* MESSAGE */
+
+            if (messageInput.value.trim() === '') {
+
+                showError(
+                    messageInput,
+                    'messageError'
+                );
+
+                valid = false;
+
+            } else {
+
+                clearError(
+                    messageInput,
+                    'messageError'
+                );
+
+            }
+
+
+            if (!valid) {
+
+                formStatus.classList.add('hidden');
+
+                return;
+
+            }
+
+
+            /* LOADING */
+
+            submitButton.disabled = true;
+
+            submitText.textContent =
+                'Đang chuẩn bị email...';
+
+
+            /*
+                Tạo nội dung email
+            */
+
+            const name =
+                nameInput.value.trim();
+
+            const email =
+                emailInput.value.trim();
+
+            const phone =
+                phoneInput.value.trim() || 'Không cung cấp';
+
+            const subject =
+                subjectInput.value;
+
+            const message =
+                messageInput.value.trim();
+
+
+            const emailSubject =
+                encodeURIComponent(
+                    `[Portfolio] ${subject} — ${name}`
+                );
+
+
+            const emailBody =
+                encodeURIComponent(
+                    `Xin chào Nguyễn Phi Vương,
+
+Tôi muốn liên hệ với bạn từ portfolio.
+
+Họ và tên: ${name}
+Email: ${email}
+Số điện thoại: ${phone}
+Chủ đề: ${subject}
+
+Nội dung:
+${message}
+
+---
+Tin nhắn được gửi từ portfolio của Nguyễn Phi Vương.`
+                );
+
+
+            const mailto =
+                `mailto:vuongnpps40933@gmail.com?subject=${emailSubject}&body=${emailBody}`;
+
+
+            setTimeout(() => {
+
+                window.location.href = mailto;
+
+
+                formStatus.textContent =
+                    'Đã chuẩn bị email. Nếu ứng dụng email chưa mở, hãy liên hệ trực tiếp qua vuongnpps40933@gmail.com.';
+
+                formStatus.classList.remove('hidden');
+
+
+                submitButton.disabled = false;
+
+                submitText.textContent =
+                    'Gửi tin nhắn ↗';
+
+            }, 500);
+
+        });
+
+
+
+        /* =====================================================
+           CLEAR ERROR WHILE TYPING
+        ====================================================== */
+
+        nameInput.addEventListener('input', () => {
+
+            if (nameInput.value.trim()) {
+
+                clearError(
+                    nameInput,
+                    'nameError'
+                );
+
+            }
+
+        });
+
+
+        emailInput.addEventListener('input', () => {
+
+            if (
+                emailInput.value.trim() &&
+                validEmail(emailInput.value.trim())
+            ) {
+
+                clearError(
+                    emailInput,
+                    'emailError'
+                );
+
+            }
+
+        });
+
+
+        messageInput.addEventListener('input', () => {
+
+            if (messageInput.value.trim()) {
+
+                clearError(
+                    messageInput,
+                    'messageError'
+                );
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
