@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Great+Vibes&display=swap"
     rel="stylesheet"
   >
 
@@ -148,16 +148,29 @@
     }
 
     .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+
       font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--ink-faint);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
       margin-bottom: 18px;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 22px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--signal-2), transparent);
     }
 
     .eyebrow span {
       color: var(--signal-2);
+      font-weight: 700;
     }
 
     .fade-in {
@@ -174,6 +187,27 @@
       opacity: 1;
       transform: translateY(0);
       filter: blur(0);
+    }
+
+    /* LENS FOCUS — heading "lấy nét" như nhìn qua kính viễn vọng */
+    .fade-in .section-heading,
+    .fade-in > h2 {
+      display: block;
+      opacity: 0;
+      filter: blur(16px);
+      transform: scale(1.06);
+      transition:
+        opacity 1.1s cubic-bezier(.19,1,.22,1),
+        filter 1.1s cubic-bezier(.19,1,.22,1),
+        transform 1.1s cubic-bezier(.19,1,.22,1);
+      transition-delay: .1s;
+    }
+
+    .fade-in.show .section-heading,
+    .fade-in.show > h2 {
+      opacity: 1;
+      filter: blur(0);
+      transform: scale(1);
     }
 
     /* BACKGROUND */
@@ -916,8 +950,6 @@
           rgba(124,140,255,.02) 68%,
           transparent 100%
         );
-      /* Không dùng filter:blur — soft edge đã có sẵn qua gradient,
-         tránh buộc trình duyệt phải re-render layer blur khổng lồ mỗi khung hình */
       animation: milky-drift 46s ease-in-out infinite alternate;
       will-change: transform;
     }
@@ -1609,8 +1641,6 @@
       z-index: 1;
     }
 
-    /* Hiệu ứng "tia sáng quét" khi hover — an toàn trong ngữ cảnh 3D,
-       không dùng z-index âm nên không bị vỡ hình như hiệu ứng viền cũ */
     .btn-primary::after {
       content: "";
       position: absolute;
@@ -1847,6 +1877,33 @@
     }
 
     /* ABOUT */
+
+    #about {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .constellation-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .8s ease;
+    }
+
+    .constellation-canvas.show {
+      opacity: 1;
+    }
+
+    #about .wrap {
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 720px) {
+      .constellation-canvas { display: none; }
+    }
 
     .about-grid {
       display: grid;
@@ -2103,7 +2160,7 @@
       border-bottom: 1px solid var(--edge);
     }
 
-    a.project:hover {
+    .project:hover {
       padding-left: 14px;
     }
 
@@ -2130,11 +2187,19 @@
       align-items: center;
       gap: 8px;
 
+      padding: 9px 16px;
+
       font-size: 11.5px;
       font-weight: 600;
 
-      color: var(--ink-dim);
+      color: var(--ink);
       white-space: nowrap;
+
+      border: 1px solid var(--edge-strong);
+      border-radius: 100px;
+      background: rgba(255,255,255,.02);
+
+      transition: border-color .25s ease, background .25s ease, transform .2s ease;
     }
 
     .project-visit .arrow {
@@ -2143,11 +2208,13 @@
       transition: transform .3s ease;
     }
 
-    a.project:hover .project-visit {
-      color: var(--ink);
+    .project:hover .project-visit {
+      border-color: var(--signal);
+      background: rgba(124,140,255,.08);
+      transform: translateY(-1px);
     }
 
-    a.project:hover .project-visit .arrow {
+    .project:hover .project-visit .arrow {
       transform: translate(3px,-3px);
     }
 
@@ -2160,7 +2227,7 @@
     .project-thumb {
       margin-top: 22px;
 
-      height: 220px;
+      height: 320px;
 
       display: flex;
       flex-direction: column;
@@ -2180,9 +2247,9 @@
       transition: border-color .3s ease, background .3s ease;
     }
 
-    a.project:hover .project-thumb {
+    .project:hover .project-thumb {
       border-color: rgba(124,140,255,.4);
-      background: rgba(124,140,255,.04);
+      background-color: rgba(124,140,255,.04);
     }
 
     .project-thumb-icon {
@@ -2190,17 +2257,94 @@
       opacity: .6;
     }
 
-    /* Khi đã có ảnh thật: thêm class "has-image" và style="background-image:url(...)"
-       lên .project-thumb — 2 span placeholder bên trong sẽ tự ẩn */
     .project-thumb.has-image {
       border-style: solid;
-      background-size: cover;
-      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: top center;
+      background-color: #fff;
     }
 
     .project-thumb.has-image .project-thumb-icon,
     .project-thumb.has-image .project-thumb-text {
       display: none;
+    }
+
+    /* THUMB SLIDER — 1 khung ảnh, tự động chuyển đổi Trước ⇄ Sau */
+    .project-thumb-slider {
+      margin-top: 22px;
+      position: relative;
+
+      height: 320px;
+
+      border-radius: 14px;
+      overflow: hidden;
+
+      border: 1px solid var(--edge-strong);
+      background: #050608;
+    }
+
+    .slider-item {
+      position: absolute;
+      inset: 0;
+
+      opacity: 0;
+      transform: scale(1.02);
+
+      transition: opacity 1s ease, transform 1.2s ease;
+      pointer-events: none;
+    }
+
+    .slider-item.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 1;
+    }
+
+    .slider-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: top center;
+      display: block;
+      background: #fff;
+    }
+
+    .thumb-compare-label {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+
+      padding: 5px 12px;
+
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+
+      color: var(--ink);
+      background: rgba(2,2,4,.65);
+      border: 1px solid var(--edge-strong);
+      border-radius: 100px;
+
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .thumb-compare-label-after {
+      color: var(--void);
+      background: var(--signal-2);
+      border-color: var(--signal-2);
+    }
+
+    @media (max-width: 650px) {
+      .project-thumb-slider {
+        height: 240px;
+      }
+      .thumb-compare-item {
+        height: 180px;
+      }
     }
 
     /* PROJECT TILT 3D — nghiêng theo con trỏ khi hover */
@@ -2264,20 +2408,44 @@
       inset: 0;
       z-index: 200;
 
-      display: none;
+      display: flex;
       align-items: flex-start;
       justify-content: center;
 
       padding: 60px 20px;
       overflow-y: auto;
 
-      background: rgba(2,2,4,.78);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(2,2,4,0);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+
+      transition:
+        opacity .5s ease,
+        backdrop-filter .6s cubic-bezier(.19,1,.22,1),
+        -webkit-backdrop-filter .6s cubic-bezier(.19,1,.22,1),
+        background .5s ease,
+        visibility 0s linear .5s;
     }
 
     .case-study-modal-overlay.open {
-      display: flex;
+      background: rgba(2,2,4,.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+
+      transition:
+        opacity .5s ease,
+        backdrop-filter .6s cubic-bezier(.19,1,.22,1),
+        -webkit-backdrop-filter .6s cubic-bezier(.19,1,.22,1),
+        background .5s ease,
+        visibility 0s linear 0s;
     }
 
     .case-study-modal {
@@ -2897,8 +3065,6 @@
       cursor: pointer;
     }
 
-    /* Dự phòng cho trình duyệt chưa hỗ trợ color-scheme:
-       ép nền/màu chữ tối cho danh sách option xổ xuống */
     .field select option {
       background-color: var(--panel-solid);
       color: var(--ink);
@@ -3080,7 +3246,8 @@
       right: 22px;
       bottom: 22px;
 
-      z-index: 40;
+      z-index: 80;
+      pointer-events: auto;
 
       width: 54px;
       height: 54px;
@@ -3357,8 +3524,6 @@
     DEPTH <span id="hudDepth">0000</span> LV
   </div>
 
-  <!-- NAV -->
-
   <header class="nav" id="navbar">
     <div class="wrap nav-inner">
 
@@ -3366,25 +3531,9 @@
 
         <span class="brand-mark">
           <svg viewBox="0 0 28 28" fill="none">
-            <circle
-              cx="14"
-              cy="14"
-              r="12"
-              stroke="#3a4060"
-              stroke-width="1"
-            />
-            <circle
-              cx="14"
-              cy="14"
-              r="2.3"
-              fill="#7c8cff"
-            />
-            <circle
-              cx="14"
-              cy="3"
-              r="1.6"
-              fill="#3fe8cf"
-            />
+            <circle cx="14" cy="14" r="12" stroke="#3a4060" stroke-width="1" />
+            <circle cx="14" cy="14" r="2.3" fill="#7c8cff" />
+            <circle cx="14" cy="3" r="1.6" fill="#3fe8cf" />
           </svg>
         </span>
 
@@ -3403,12 +3552,7 @@
         <a href="#education" class="nav-link">Education</a>
       </nav>
 
-      <a
-        href="CV-Nguyen-Phi-Vuong.pdf"
-        download
-        class="nav-cv cv-download-link"
-        title="Tải CV (PDF) — đặt file CV.pdf cùng thư mục với trang này"
-      >
+      <a href="CV-Nguyen-Phi-Vuong.pdf" download class="nav-cv cv-download-link" title="Tải CV (PDF) — đặt file CV.pdf cùng thư mục với trang này">
         Tải CV ↓
       </a>
 
@@ -3416,12 +3560,7 @@
         Liên hệ
       </a>
 
-      <button
-        class="menu-btn"
-        id="menuButton"
-        aria-label="Mở menu"
-        aria-expanded="false"
-      >
+      <button class="menu-btn" id="menuButton" aria-label="Mở menu" aria-expanded="false">
         <span id="menuIcon">☰</span>
       </button>
 
@@ -3439,9 +3578,6 @@
     <a href="#contact" class="mobile-link">Contact</a>
     <a href="CV-Nguyen-Phi-Vuong.pdf" download class="mobile-link cv-download-link">Tải CV ↓</a>
   </div>
-
-
-  <!-- HERO -->
 
   <section id="home" class="hero hero-anim hero-tilt">
 
@@ -3483,20 +3619,13 @@
       </div>
 
       <div class="hero-actions">
-        <a href="#work" class="btn btn-primary">
-          Xem dự án thực tế ↘
-        </a>
-
-        <a href="#contact" class="btn btn-ghost">
-          Let's talk
-        </a>
+        <a href="#work" class="btn btn-primary">Xem dự án thực tế ↘</a>
+        <a href="#contact" class="btn btn-ghost">Let's talk</a>
       </div>
 
       <div class="flow-wrap">
 
-        <p class="flow-label">
-          Digital growth flow
-        </p>
+        <p class="flow-label">Digital growth flow</p>
 
         <div class="flow">
 
@@ -3537,10 +3666,9 @@
 
   </section>
 
-
-  <!-- ABOUT -->
-
   <section id="about" class="section">
+
+    <canvas id="constellationCanvas" class="constellation-canvas"></canvas>
 
     <div class="wrap fade-in">
 
@@ -3617,9 +3745,6 @@
 
   </section>
 
-
-  <!-- PROFILE -->
-
   <section class="section section-alt">
 
     <div class="wrap fade-in">
@@ -3645,99 +3770,63 @@
       <div class="profile-grid">
 
         <div class="profile-card">
-
-          <span class="profile-card-label">
-            CORE
-          </span>
-
+          <span class="profile-card-label">CORE</span>
           <h3>SEO & Organic Growth</h3>
-
           <p>
             Technical SEO, On-page SEO, Local SEO, crawling, indexing,
             canonical, sitemap, robots.txt, internal linking,
             site structure và xử lý lỗi GSC.
           </p>
-
         </div>
 
         <div class="profile-card">
-
-          <span class="profile-card-label">
-            WEB
-          </span>
-
+          <span class="profile-card-label">WEB</span>
           <h3>Website & E-commerce</h3>
-
           <p>
             HTML, CSS, JavaScript, Shopify, Shopify Liquid,
             responsive UI, landing pages, website rebuild,
             optimization và E-commerce operations.
           </p>
-
         </div>
 
         <div class="profile-card">
-
-          <span class="profile-card-label">
-            DATA
-          </span>
-
+          <span class="profile-card-label">DATA</span>
           <h3>Tracking & Optimization</h3>
-
           <p>
             Google Search Console, GA4, Google Tag Manager,
             Microsoft Clarity, PageSpeed Insights và phân tích
             dữ liệu phục vụ tối ưu website.
           </p>
-
         </div>
 
         <div class="profile-card">
-
-          <span class="profile-card-label">
-            GROWTH
-          </span>
-
+          <span class="profile-card-label">GROWTH</span>
           <h3>Conversion & Lead</h3>
-
           <p>
             Landing Page, CTA, UX/CRO, lead generation,
             customer journey và tối ưu website theo hướng
             chuyển đổi.
           </p>
-
         </div>
 
         <div class="profile-card">
-
-          <span class="profile-card-label">
-            OFF-PAGE
-          </span>
-
+          <span class="profile-card-label">OFF-PAGE</span>
           <h3>Local & Authority</h3>
-
           <p>
             Local SEO, backlink research, Reddit-based
             off-page activities và các hoạt động hỗ trợ
             organic visibility.
           </p>
-
         </div>
 
         <div class="profile-card">
-
-          <span class="profile-card-label">
-            AI
-          </span>
-
+          <span class="profile-card-label">AI</span>
           <h3>AI-assisted Execution</h3>
-
           <p>
             Ứng dụng Claude, OpenClaw và các workflow AI
             để hỗ trợ research, execution, website work
             và tăng tốc quá trình triển khai.
           </p>
-
         </div>
 
       </div>
@@ -3745,9 +3834,6 @@
     </div>
 
   </section>
-
-
-  <!-- CAPABILITIES -->
 
   <section id="capabilities" class="section">
 
@@ -3774,133 +3860,99 @@
       <div class="cap-grid">
 
         <div class="cap-cell">
-
           <p class="cap-tag">SEO / 01</p>
-
           <h3>Technical SEO</h3>
-
           <p>
             Crawling, indexing, canonical, sitemap, robots.txt,
             404, 5xx, redirects, internal links, site architecture,
             structured data và các vấn đề kỹ thuật ảnh hưởng SEO.
           </p>
-
         </div>
 
         <div class="cap-cell">
-
           <p class="cap-tag">SEO / 02</p>
-
           <h3>On-page & Local SEO</h3>
-
           <p>
             Content structure, landing page SEO, metadata,
             internal linking, local pages và tối ưu website
             theo search intent.
           </p>
-
         </div>
 
         <div class="cap-cell">
-
           <p class="cap-tag">WEB / 01</p>
-
           <h3>Website Development</h3>
-
           <p>
             HTML5, CSS3, JavaScript, responsive UI,
             website structure, optimization và rebuild
             các thành phần website.
           </p>
-
         </div>
 
         <div class="cap-cell">
-
           <p class="cap-tag">WEB / 02</p>
-
           <h3>Shopify & Liquid</h3>
-
           <p>
             Shopify Admin, Theme Editor, Shopify Liquid,
             theme customization, page structure, E-commerce
             operations và website optimization.
           </p>
-
         </div>
 
         <div class="cap-cell">
-
           <p class="cap-tag">DATA</p>
-
           <h3>Analytics & Tracking</h3>
-
           <p>
             GSC, GA4, GTM, Microsoft Clarity, PageSpeed
             và theo dõi các tín hiệu cần thiết cho
             SEO và website optimization.
           </p>
-
         </div>
 
         <div class="cap-cell">
-
           <p class="cap-tag">GROWTH</p>
-
           <h3>CRO & Lead Generation</h3>
-
           <p>
             Landing page, CTA, form, UX flow và các điểm
             chuyển đổi giúp website biến organic traffic
             thành lead hoặc customer.
           </p>
-
         </div>
 
       </div>
 
       <div class="stack">
 
-        <p class="stack-label">
-          Technology / Tools / Platforms
-        </p>
+        <p class="stack-label">Technology / Tools / Platforms</p>
 
         <div class="stack-list">
-
           <span class="tag">Google Search Console</span>
           <span class="tag">Google Analytics 4</span>
           <span class="tag">Google Tag Manager</span>
           <span class="tag">PageSpeed Insights</span>
           <span class="tag">Microsoft Clarity</span>
           <span class="tag">Google Merchant Center</span>
-
           <span class="tag">Technical SEO</span>
           <span class="tag">On-page SEO</span>
           <span class="tag">Local SEO</span>
           <span class="tag">CRO</span>
-
           <span class="tag">Shopify</span>
           <span class="tag">Shopify Liquid</span>
           <span class="tag">HTML5</span>
           <span class="tag">CSS3</span>
           <span class="tag">JavaScript</span>
-
           <span class="tag">ReactJS</span>
-
           <span class="tag">Java</span>
           <span class="tag">Spring Boot</span>
           <span class="tag">JSP / Servlet</span>
           <span class="tag">REST API</span>
           <span class="tag">JDBC</span>
-
           <span class="tag">MySQL</span>
           <span class="tag">SQL Server</span>
           <span class="tag">Postman</span>
-
           <span class="tag">Claude</span>
           <span class="tag">OpenClaw</span>
           <span class="tag">AI-assisted Workflow</span>
-
         </div>
 
       </div>
@@ -3908,9 +3960,6 @@
     </div>
 
   </section>
-
-
-  <!-- PROCESS -->
 
   <section class="section section-alt">
 
@@ -3932,58 +3981,42 @@
       <div class="process-grid">
 
         <div class="process-card">
-
           <span class="process-number">01 / AUDIT</span>
-
           <h3>Kiểm tra</h3>
-
           <p>
             Kiểm tra website, SEO, structure, crawling,
             indexing, performance, tracking và các điểm
             có thể ảnh hưởng đến business.
           </p>
-
         </div>
 
         <div class="process-card">
-
           <span class="process-number">02 / ANALYZE</span>
-
           <h3>Phân tích</h3>
-
           <p>
             Xác định nguyên nhân, mức độ ảnh hưởng,
             ưu tiên vấn đề và tìm hướng xử lý phù hợp.
           </p>
-
         </div>
 
         <div class="process-card">
-
           <span class="process-number">03 / EXECUTE</span>
-
           <h3>Triển khai</h3>
-
           <p>
             Trực tiếp chỉnh sửa website, Shopify,
             Liquid, SEO elements, landing pages,
             tracking hoặc các phần liên quan.
           </p>
-
         </div>
 
         <div class="process-card">
-
           <span class="process-number">04 / VERIFY</span>
-
           <h3>Kiểm tra lại</h3>
-
           <p>
             Kiểm tra kết quả sau triển khai bằng
             GSC, analytics, performance tools và
             các tín hiệu thực tế của website.
           </p>
-
         </div>
 
       </div>
@@ -3991,9 +4024,6 @@
     </div>
 
   </section>
-
-
-  <!-- WORK -->
 
   <section id="work" class="section">
 
@@ -4018,36 +4048,27 @@
 
       </div>
 
-
-      <!-- PROJECT 01 -->
-
       <div class="project">
 
         <div class="project-top">
-
-          <span class="project-id">
-            TX-01 · WEBSITE REBUILD · SEO · LOCAL
-          </span>
-
-          <a
-            href="https://texasglassdoor.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="project-visit"
-          >
+          <span class="project-id">TX-01 · WEBSITE REBUILD · SEO · LOCAL</span>
+          <a href="https://texasglassdoor.com/" target="_blank" rel="noopener noreferrer" class="project-visit">
             Visit website
             <span class="arrow">↗</span>
           </a>
-
         </div>
 
-        <h3>
-          Texas Glass Door
-        </h3>
+        <h3>Texas Glass Door</h3>
 
-        <div class="project-thumb" data-project="TX-01">
-          <span class="project-thumb-icon">🖼</span>
-          <span class="project-thumb-text">Ảnh/preview dự án — thêm sau</span>
+        <div class="project-thumb-slider" data-project="TX-01">
+          <div class="slider-item active">
+            <img src="images/1.jpg" alt="Texas Glass Door — trước khi rebuild" loading="lazy">
+            <span class="thumb-compare-label">Trước</span>
+          </div>
+          <div class="slider-item">
+            <img src="images/2.jpg" alt="Texas Glass Door — sau khi rebuild" loading="lazy">
+            <span class="thumb-compare-label thumb-compare-label-after">Sau</span>
+          </div>
         </div>
 
         <p class="project-description">
@@ -4059,78 +4080,54 @@
         </p>
 
         <div class="hero-tags">
-
           <span class="tag">Website Rebuild</span>
           <span class="tag">Technical SEO</span>
           <span class="tag">Local SEO</span>
           <span class="tag">On-page SEO</span>
           <span class="tag">UX / CRO</span>
           <span class="tag">Performance</span>
-
         </div>
 
         <div class="project-details">
-
           <div class="project-detail">
             <span>FOCUS</span>
             <b>Website Foundation</b>
           </div>
-
           <div class="project-detail">
             <span>SEO</span>
             <b>Technical + Local</b>
           </div>
-
           <div class="project-detail">
             <span>ROLE</span>
             <b>Implementation & Optimization</b>
           </div>
-
         </div>
 
-        <button
-          class="case-study-btn"
-          type="button"
+        <button class="case-study-btn" type="button"
           data-title="Texas Glass Door"
           data-id="TX-01 · Website Rebuild"
-          data-problem="Website hiện tại có cấu trúc và on-page chưa tối ưu, chưa hỗ trợ tốt cho hướng phát triển organic/local search. [Bổ sung thêm bối cảnh cụ thể của khách hàng tại đây]."
-          data-approach="Rebuild lại structure, UI, nội dung và SEO foundation từ đầu; đồng thời tối ưu conversion flow để tăng tỉ lệ chuyển đổi từ traffic organic/local."
-          data-result="[Số liệu cụ thể — cập nhật sau. Ví dụ: organic traffic tăng X%, số từ khoá vào top 10 tăng Y, thời gian tải trang giảm Z giây.]"
-          data-lesson="[Bài học rút ra từ dự án — ví dụ về quy trình làm việc, thách thức kỹ thuật đã giải quyết, hoặc điều sẽ làm khác đi lần sau.]"
-        >
+          data-problem="Website cũ chưa được tối ưu về cấu trúc, trải nghiệm người dùng và khả năng mở rộng SEO. Nội dung sản phẩm chưa được tổ chức rõ ràng, thiếu landing pages theo từng nhóm nhu cầu và chưa khai thác tốt nguồn traffic từ Google Search và Local Search."
+          data-approach="Tái cấu trúc toàn bộ website với hướng tiếp cận SEO-first: xây dựng lại sitemap và cấu trúc category sản phẩm · tối ưu UI/UX để cải thiện hành trình khách hàng từ tìm kiếm → xem sản phẩm → gửi yêu cầu báo giá · xây dựng nền tảng Technical SEO, schema, metadata và internal linking · tạo các landing pages theo sản phẩm, khu vực phục vụ và nhóm khách hàng mục tiêu · cải thiện tốc độ tải trang và trải nghiệm trên mobile."
+          data-result="Website có cấu trúc rõ ràng hơn, dễ mở rộng nội dung SEO và hỗ trợ tốt hơn cho quá trình thu hút khách hàng organic. Cải thiện khả năng index của Google, tăng độ phủ từ khóa mục tiêu và tạo nền tảng cho chiến lược tăng trưởng organic dài hạn."
+          data-lesson="Một website thương mại không chỉ cần đẹp về giao diện mà cần được xây dựng như một hệ thống marketing. Sự kết hợp giữa UX, SEO technical, content strategy và conversion optimization giúp biến website thành một kênh tạo khách hàng liên tục.">
           Xem case study chi tiết →
         </button>
 
       </div>
 
-
-      <!-- PROJECT 02 -->
-
       <div class="project">
 
         <div class="project-top">
-
-          <span class="project-id">
-            TX-02 · SHOPIFY · E-COMMERCE · SEO
-          </span>
-
-          <a
-            href="https://usacabinetsoutlet.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="project-visit"
-          >
+          <span class="project-id">TX-02 · SHOPIFY · E-COMMERCE · SEO</span>
+          <a href="https://usacabinetsoutlet.com/" target="_blank" rel="noopener noreferrer" class="project-visit">
             Visit website
             <span class="arrow">↗</span>
           </a>
-
         </div>
 
-        <h3>
-          USA Cabinets Outlet
-        </h3>
+        <h3>USA Cabinets Outlet</h3>
 
-        <div class="project-thumb" data-project="TX-02">
+        <div class="project-thumb has-image" data-project="TX-02" style="background-image: url('images/4.jpg');">
           <span class="project-thumb-icon">🖼</span>
           <span class="project-thumb-text">Ảnh/preview dự án — thêm sau</span>
         </div>
@@ -4145,7 +4142,6 @@
         </p>
 
         <div class="hero-tags">
-
           <span class="tag">Shopify</span>
           <span class="tag">Liquid</span>
           <span class="tag">E-commerce</span>
@@ -4153,63 +4149,52 @@
           <span class="tag">GSC</span>
           <span class="tag">Local Pages</span>
           <span class="tag">PageSpeed</span>
-
         </div>
 
         <div class="project-details">
-
           <div class="project-detail">
             <span>PLATFORM</span>
             <b>Shopify</b>
           </div>
-
           <div class="project-detail">
             <span>SEO</span>
             <b>Crawl · Index · Canonical</b>
           </div>
-
           <div class="project-detail">
             <span>WEB</span>
             <b>Liquid · Structure · Optimization</b>
           </div>
-
         </div>
 
-        <button
-          class="case-study-btn"
-          type="button"
+        <button class="case-study-btn" type="button"
           data-title="USA Cabinets Outlet"
           data-id="TX-02 · Shopify E-commerce"
-          data-problem="Website Shopify gặp các vấn đề kỹ thuật ảnh hưởng đến khả năng crawl/index (canonical, sitemap, robots.txt, lỗi 404/5xx). [Bổ sung thêm bối cảnh cụ thể của khách hàng tại đây]."
-          data-approach="Rà soát và xử lý toàn diện technical SEO trên nền tảng Shopify: GSC, crawling, indexing, canonical, sitemap, redirects; đồng thời tối ưu Shopify Liquid, cấu trúc website và landing pages."
-          data-result="[Số liệu cụ thể — cập nhật sau. Ví dụ: số trang được index tăng X%, lỗi crawl giảm Y, tốc độ tải trang cải thiện Z điểm PageSpeed.]"
-          data-lesson="[Bài học rút ra từ dự án — ví dụ về đặc thù kỹ thuật của Shopify, cách phối hợp với đội ngũ vận hành cửa hàng, hoặc quy trình kiểm tra chất lượng đã áp dụng.]"
-        >
+          data-problem="Website Shopify gặp nhiều vấn đề ảnh hưởng đến khả năng phát triển organic và vận hành thương mại điện tử: cấu trúc sản phẩm chưa tối ưu cho SEO · các vấn đề về crawling, indexing, canonical, sitemap và URL structure làm giảm khả năng hiển thị trên Google · product pages và collection pages chưa được tối ưu để hỗ trợ tìm kiếm và chuyển đổi."
+          data-approach="Thực hiện audit và tối ưu toàn diện hệ thống Shopify: kiểm tra Google Search Console, crawl data và index coverage · xử lý technical SEO (canonical, sitemap, robots.txt, redirects và lỗi 404) · tối ưu Shopify Liquid, theme structure và tốc độ website · xây dựng lại cấu trúc collection, product pages và landing pages theo search intent · chuẩn hóa metadata, schema markup và internal linking để tăng khả năng ranking."
+          data-result="Cải thiện nền tảng kỹ thuật giúp Google dễ dàng crawl và index website hơn. Website có cấu trúc SEO rõ ràng hơn, tăng khả năng mở rộng hàng nghìn sản phẩm và tạo nền tảng cho chiến lược organic growth dài hạn."
+          data-lesson="Shopify không chỉ là một nền tảng bán hàng mà cần được tối ưu như một hệ thống marketing. Việc kết hợp giữa technical SEO, cấu trúc dữ liệu sản phẩm và trải nghiệm người dùng giúp tăng khả năng hiển thị, traffic và hiệu quả chuyển đổi.">
           Xem case study chi tiết →
         </button>
 
       </div>
 
-
-      <!-- PROJECT 03 -->
-
       <div class="project">
 
         <div class="project-top">
-
-          <span class="project-id">
-            TX-03 · SEO · TRACKING · GROWTH
-          </span>
-
+          <span class="project-id">TX-03 · SEO · TRACKING · GROWTH</span>
         </div>
 
-        <h3>
-          Organic Growth System
-        </h3>
+        <h3>SEO Growth Framework</h3>
 
-        <div class="project-thumb" data-project="TX-03">
-          <span class="project-thumb-icon">🖼</span>
-          <span class="project-thumb-text">Ảnh/preview dự án — thêm sau</span>
+        <div class="project-thumb-slider" data-project="TX-03">
+          <div class="slider-item active">
+            <img src="images/5.png" alt="SEO Growth Framework — Google Merchant Center" loading="lazy">
+            <span class="thumb-compare-label">Merchant</span>
+          </div>
+          <div class="slider-item">
+            <img src="images/6.png" alt="SEO Growth Framework — GA4 Reports Snapshot" loading="lazy">
+            <span class="thumb-compare-label thumb-compare-label-after">Analytics</span>
+          </div>
         </div>
 
         <p class="project-description">
@@ -4221,7 +4206,6 @@
         </p>
 
         <div class="hero-tags">
-
           <span class="tag">GSC</span>
           <span class="tag">GA4</span>
           <span class="tag">GTM</span>
@@ -4230,40 +4214,27 @@
           <span class="tag">Merchant Center</span>
           <span class="tag">Local SEO</span>
           <span class="tag">Backlink</span>
-
         </div>
 
-        <button
-          class="case-study-btn"
-          type="button"
-          data-title="Organic Growth System"
+        <button class="case-study-btn" type="button"
+          data-title="SEO Growth Framework"
           data-id="TX-03 · SEO & Growth"
-          data-problem="Cần một hệ thống theo dõi và tối ưu tăng trưởng organic xuyên suốt nhiều kênh (search, tracking, landing pages, off-page). [Bổ sung thêm bối cảnh cụ thể tại đây]."
-          data-approach="Triển khai và vận hành bộ công cụ GSC, GA4, GTM, PageSpeed, Microsoft Clarity, Google Merchant Center song song với Local SEO, landing pages và các hoạt động backlink/off-page."
-          data-result="[Số liệu cụ thể — cập nhật sau. Ví dụ: organic traffic tăng X% theo quý, tỉ lệ chuyển đổi landing page tăng Y%.]"
-          data-lesson="[Bài học rút ra — ví dụ cách kết hợp dữ liệu từ nhiều công cụ để ra quyết định, hoặc quy trình tối ưu liên tục đã xây dựng.]"
-        >
+          data-problem="Xây dựng hệ thống tăng trưởng organic bền vững giúp website cải thiện thứ hạng tìm kiếm, tăng lượng truy cập chất lượng và tạo thêm cơ hội chuyển đổi thông qua SEO, content và tối ưu trải nghiệm người dùng."
+          data-approach="Triển khai hệ thống đo lường và tối ưu toàn diện với Google Search Console, Google Analytics 4, Google Tag Manager, PageSpeed Insights và Microsoft Clarity. Kết hợp chiến lược Technical SEO, Local SEO, tối ưu landing pages, cải thiện tốc độ website, xây dựng nội dung theo search intent và phát triển backlink nhằm tăng độ uy tín domain."
+          data-result="Cải thiện khả năng thu thập dữ liệu và lập chỉ mục của Google, tăng trưởng organic traffic theo từng giai đoạn, nâng cao thứ hạng từ khóa mục tiêu và cải thiện tỷ lệ chuyển đổi trên các trang landing page."
+          data-lesson="Tăng trưởng organic hiệu quả không đến từ một yếu tố đơn lẻ mà cần sự kết hợp giữa dữ liệu, kỹ thuật SEO, nội dung chất lượng và quá trình tối ưu liên tục dựa trên hành vi người dùng.">
           Xem case study chi tiết →
         </button>
 
       </div>
 
-
-      <!-- PROJECT 04 -->
-
       <div class="project">
 
         <div class="project-top">
-
-          <span class="project-id">
-            TX-04 · AI · AUTOMATION · OPERATIONS
-          </span>
-
+          <span class="project-id">TX-04 · AI · AUTOMATION · OPERATIONS</span>
         </div>
 
-        <h3>
-          AI-assisted Digital Workflow
-        </h3>
+        <h3>AI-assisted Digital Workflow</h3>
 
         <div class="project-thumb" data-project="TX-04">
           <span class="project-thumb-icon">🖼</span>
@@ -4279,25 +4250,20 @@
         </p>
 
         <div class="hero-tags">
-
           <span class="tag">Claude</span>
           <span class="tag">OpenClaw</span>
           <span class="tag">AI Workflow</span>
           <span class="tag">Research</span>
           <span class="tag">Execution</span>
-
         </div>
 
-        <button
-          class="case-study-btn"
-          type="button"
+        <button class="case-study-btn" type="button"
           data-title="AI-assisted Digital Workflow"
           data-id="TX-04 · AI Workflow"
-          data-problem="Khối lượng công việc website/SEO/research cần được xử lý nhanh hơn mà vẫn đảm bảo chất lượng và độ chính xác. [Bổ sung thêm bối cảnh cụ thể tại đây]."
-          data-approach="Ứng dụng AI (Claude, OpenClaw) như một lớp hỗ trợ trong quy trình thực thi — hỗ trợ research, content/SEO tasks — trong khi vẫn giữ vai trò kiểm tra và ra quyết định cuối cùng ở con người."
-          data-result="[Số liệu cụ thể — cập nhật sau. Ví dụ: thời gian xử lý task giảm X%, số lượng task xử lý được trong cùng thời gian tăng Y.]"
-          data-lesson="[Bài học rút ra — ví dụ giới hạn của AI trong công việc thực tế, hoặc cách xây dựng quy trình kiểm tra chất lượng khi dùng AI.]"
-        >
+          data-problem="Quy trình xử lý website, SEO, research và vận hành digital yêu cầu nhiều tác vụ lặp lại, từ phân tích dữ liệu, nghiên cứu thị trường, xây dựng nội dung đến kiểm tra chất lượng. Thách thức là tăng tốc độ xử lý nhưng vẫn duy trì độ chính xác, tính nhất quán và khả năng kiểm soát kết quả."
+          data-approach="Xây dựng AI-assisted workflow kết hợp giữa AI tools và quy trình kiểm duyệt thủ công: sử dụng AI để hỗ trợ research, phân tích dữ liệu và tổng hợp thông tin · tăng tốc quá trình tạo content, SEO planning và documentation · kết hợp AI với automation workflow để giảm các tác vụ lặp lại · thiết lập quy trình review, kiểm tra và ra quyết định cuối cùng bởi con người nhằm đảm bảo chất lượng đầu ra."
+          data-result="Rút ngắn thời gian xử lý các tác vụ digital, tăng khả năng xử lý nhiều workflow song song và cải thiện hiệu quả trong quá trình triển khai SEO, website optimization và research. AI trở thành công cụ hỗ trợ mở rộng năng lực làm việc thay vì thay thế quy trình tư duy và kiểm soát của con người."
+          data-lesson="AI mang lại giá trị lớn nhất khi được tích hợp vào một hệ thống làm việc có cấu trúc. Hiệu quả không đến từ việc sử dụng nhiều công cụ AI, mà đến từ cách xây dựng workflow phù hợp, kết hợp giữa automation, dữ liệu và tư duy chiến lược.">
           Xem case study chi tiết →
         </button>
 
@@ -4307,9 +4273,6 @@
 
   </section>
 
-
-  <!-- EXPERIENCE -->
-
   <section id="experience" class="section section-alt">
 
     <div class="wrap fade-in">
@@ -4317,7 +4280,6 @@
       <div class="experience-grid">
 
         <div>
-
           <p class="eyebrow">
             <span>06</span> · Experience
           </p>
@@ -4326,23 +4288,15 @@
             Kinh nghiệm<br>
             thực tế.
           </h2>
-
         </div>
-
 
         <div>
 
-          <!-- CURRENT -->
-
           <div class="timeline-item">
 
-            <p class="timeline-period">
-              02/2026 — PRESENT
-            </p>
+            <p class="timeline-period">02/2026 — PRESENT</p>
 
-            <h3>
-              SEO · Website · E-commerce
-            </h3>
+            <h3>SEO · Website · E-commerce</h3>
 
             <p>
               Trực tiếp phụ trách nhiều lớp của hệ thống
@@ -4351,74 +4305,26 @@
             </p>
 
             <div class="bullet-list">
-
-              <p>
-                Trực tiếp phụ trách và phát triển 3 website thực tế.
-              </p>
-
-              <p>
-                Rebuild hoàn toàn Texas Glass Door.
-              </p>
-
-              <p>
-                Xử lý Technical SEO: crawling, indexing,
-                canonical, sitemap, robots.txt, redirects,
-                404 và 5xx.
-              </p>
-
-              <p>
-                Theo dõi và xử lý các vấn đề thông qua
-                Google Search Console.
-              </p>
-
-              <p>
-                Thực hiện On-page SEO và Local SEO.
-              </p>
-
-              <p>
-                Quản trị và tối ưu Shopify website,
-                Shopify Liquid và website structure.
-              </p>
-
-              <p>
-                Xây dựng/chỉnh sửa landing pages theo hướng
-                UX và conversion.
-              </p>
-
-              <p>
-                Theo dõi website bằng GA4, GTM và Microsoft Clarity.
-              </p>
-
-              <p>
-                Kiểm tra website performance với PageSpeed Insights.
-              </p>
-
-              <p>
-                Tham gia các hoạt động Google Merchant Center,
-                backlink/off-page và organic growth.
-              </p>
-
-              <p>
-                Ứng dụng AI thông qua Claude và OpenClaw
-                để hỗ trợ execution và workflow.
-              </p>
-
+              <p>Trực tiếp phụ trách và phát triển 3 website thực tế.</p>
+              <p>Rebuild hoàn toàn Texas Glass Door.</p>
+              <p>Xử lý Technical SEO: crawling, indexing, canonical, sitemap, robots.txt, redirects, 404 và 5xx.</p>
+              <p>Theo dõi và xử lý các vấn đề thông qua Google Search Console.</p>
+              <p>Thực hiện On-page SEO và Local SEO.</p>
+              <p>Quản trị và tối ưu Shopify website, Shopify Liquid và website structure.</p>
+              <p>Xây dựng/chỉnh sửa landing pages theo hướng UX và conversion.</p>
+              <p>Theo dõi website bằng GA4, GTM và Microsoft Clarity.</p>
+              <p>Kiểm tra website performance với PageSpeed Insights.</p>
+              <p>Tham gia các hoạt động Google Merchant Center, backlink/off-page và organic growth.</p>
+              <p>Ứng dụng AI thông qua Claude và OpenClaw để hỗ trợ execution và workflow.</p>
             </div>
 
           </div>
 
-
-          <!-- NINA -->
-
           <div class="timeline-item">
 
-            <p class="timeline-period">
-              05/2025 — 11/2025
-            </p>
+            <p class="timeline-period">05/2025 — 11/2025</p>
 
-            <h3>
-              Web Programming Intern · Công ty TM&DV Nina
-            </h3>
+            <h3>Web Programming Intern · Công ty TM&DV Nina</h3>
 
             <p>
               Tham gia phát triển website và xử lý các
@@ -4426,52 +4332,22 @@
             </p>
 
             <div class="bullet-list">
-
-              <p>
-                Xây dựng và chỉnh sửa giao diện bằng HTML,
-                CSS và JavaScript.
-              </p>
-
-              <p>
-                Phát triển ứng dụng JSP/Servlet theo mô hình MVC.
-              </p>
-
-              <p>
-                Kết nối database bằng JDBC.
-              </p>
-
-              <p>
-                Thực hiện CRUD với SQL Server.
-              </p>
-
-              <p>
-                Kiểm tra API và request bằng Postman.
-              </p>
-
-              <p>
-                Kiểm tra dữ liệu và query bằng SQL.
-              </p>
-
-              <p>
-                Hỗ trợ deploy website lên hosting.
-              </p>
-
+              <p>Xây dựng và chỉnh sửa giao diện bằng HTML, CSS và JavaScript.</p>
+              <p>Phát triển ứng dụng JSP/Servlet theo mô hình MVC.</p>
+              <p>Kết nối database bằng JDBC.</p>
+              <p>Thực hiện CRUD với SQL Server.</p>
+              <p>Kiểm tra API và request bằng Postman.</p>
+              <p>Kiểm tra dữ liệu và query bằng SQL.</p>
+              <p>Hỗ trợ deploy website lên hosting.</p>
             </div>
 
           </div>
 
-
-          <!-- BACKGROUND -->
-
           <div class="timeline-item">
 
-            <p class="timeline-period">
-              DEVELOPMENT BACKGROUND
-            </p>
+            <p class="timeline-period">DEVELOPMENT BACKGROUND</p>
 
-            <h3>
-              Software Development Foundation
-            </h3>
+            <h3>Software Development Foundation</h3>
 
             <p>
               Nền tảng phát triển phần mềm giúp tôi hiểu
@@ -4480,7 +4356,6 @@
             </p>
 
             <div class="hero-tags">
-
               <span class="tag">Java</span>
               <span class="tag">Spring Boot</span>
               <span class="tag">REST API</span>
@@ -4490,7 +4365,6 @@
               <span class="tag">SQL Server</span>
               <span class="tag">JavaScript</span>
               <span class="tag">ReactJS</span>
-
             </div>
 
           </div>
@@ -4502,9 +4376,6 @@
     </div>
 
   </section>
-
-
-  <!-- EDUCATION -->
 
   <section id="education" class="section">
 
@@ -4523,48 +4394,34 @@
 
         <div class="education-main">
 
-          <p class="edu-label">
-            FORMAL EDUCATION
-          </p>
+          <p class="edu-label">FORMAL EDUCATION</p>
 
-          <h3>
-            FPT Polytechnic
-          </h3>
+          <h3>FPT Polytechnic</h3>
 
-          <p>
-            Phát triển Phần mềm · Software Development
-          </p>
+          <p>Phát triển Phần mềm · Software Development</p>
 
           <div class="education-meta">
-
             <div>
               <span>PROGRAM</span>
               <b>Cao đẳng chính quy</b>
             </div>
-
             <div>
               <span>PERIOD</span>
               <b>2023 — 2025</b>
             </div>
-
             <div>
               <span>RESULT</span>
               <b>Tốt nghiệp loại Giỏi</b>
             </div>
-
           </div>
 
         </div>
 
         <div class="education-side">
 
-          <p class="edu-label">
-            ACADEMIC RESULT
-          </p>
+          <p class="edu-label">ACADEMIC RESULT</p>
 
-          <h3>
-            GPA 3.16
-          </h3>
+          <h3>GPA 3.16</h3>
 
           <p>
             Hoàn thành 103/103 tín chỉ trong chương trình
@@ -4580,9 +4437,6 @@
 
   </section>
 
-
-  <!-- TESTIMONIALS -->
-
   <section id="testimonials" class="section">
 
     <div class="wrap">
@@ -4591,8 +4445,8 @@
         <p class="eyebrow">
           <span>08</span> · Testimonials
         </p>
-        <h2 class="section-heading">
-          Đánh giá từ <span class="accent">đối tác & đồng nghiệp.</span>
+        <h2 class="section-heading" style="line-height:1.2; padding-bottom:6px;">
+          Đánh giá từ đối tác &<br><span class="accent">đồng nghiệp.</span>
         </h2>
       </div>
 
@@ -4600,9 +4454,8 @@
 
         <div class="testimonial-card">
           <p class="testimonial-quote">
-            “[Trích dẫn placeholder — thay bằng nhận xét thật từ khách hàng
-            hoặc quản lý đã từng làm việc cùng bạn. Ví dụ: nhận xét về tốc độ
-            xử lý công việc, khả năng phối hợp, hoặc kết quả cụ thể đạt được.]”
+            "[Trích dẫn placeholder — thay bằng nhận xét thật từ khách hàng
+            hoặc quản lý đã từng làm việc cùng bạn.]"
           </p>
           <div class="testimonial-author">
             <span class="testimonial-avatar">?</span>
@@ -4615,9 +4468,8 @@
 
         <div class="testimonial-card">
           <p class="testimonial-quote">
-            “[Trích dẫn placeholder thứ hai — có thể từ một khách hàng
-            Shopify/E-commerce, nhấn mạnh vào kết quả kinh doanh hoặc
-            trải nghiệm hợp tác.]”
+            "[Trích dẫn placeholder thứ hai — có thể từ một khách hàng
+            Shopify/E-commerce.]"
           </p>
           <div class="testimonial-author">
             <span class="testimonial-avatar">?</span>
@@ -4630,8 +4482,7 @@
 
         <div class="testimonial-card">
           <p class="testimonial-quote">
-            “[Trích dẫn placeholder thứ ba — có thể từ đồng nghiệp cùng team,
-            nói về kỹ năng làm việc nhóm hoặc tư duy giải quyết vấn đề.]”
+            "[Trích dẫn placeholder thứ ba — có thể từ đồng nghiệp cùng team.]"
           </p>
           <div class="testimonial-author">
             <span class="testimonial-avatar">?</span>
@@ -4647,9 +4498,6 @@
     </div>
 
   </section>
-
-
-  <!-- CONTACT -->
 
   <section id="contact" class="contact">
 
@@ -4667,9 +4515,7 @@
 
           <h2>
             Let's build<br>
-            <span class="accent">
-              something better.
-            </span>
+            <span class="accent">something better.</span>
           </h2>
 
           <p>
@@ -4681,231 +4527,80 @@
 
           <div class="channels">
 
-            <a
-              href="mailto:vuongnpps40933@gmail.com"
-              class="channel"
-            >
-
+            <a href="mailto:vuongnpps40933@gmail.com" class="channel">
               <span class="channel-icon">@</span>
-
               <span>
-                <span class="channel-label">
-                  EMAIL
-                </span>
-
-                <span class="channel-value">
-                  vuongnpps40933@gmail.com
-                </span>
+                <span class="channel-label">EMAIL</span>
+                <span class="channel-value">vuongnpps40933@gmail.com</span>
               </span>
-
             </a>
 
-            <a
-              href="tel:0364556871"
-              class="channel"
-            >
-
-              <span class="channel-icon">
-                ☎
-              </span>
-
+            <a href="tel:0364556871" class="channel">
+              <span class="channel-icon">☎</span>
               <span>
-                <span class="channel-label">
-                  PHONE
-                </span>
-
-                <span class="channel-value">
-                  0364556871
-                </span>
+                <span class="channel-label">PHONE</span>
+                <span class="channel-value">0364556871</span>
               </span>
-
             </a>
 
-            <a
-              href="https://www.facebook.com/Pg1501"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="channel"
-            >
-
-              <span class="channel-icon">
-                f
-              </span>
-
+            <a href="https://www.facebook.com/Pg1501" target="_blank" rel="noopener noreferrer" class="channel">
+              <span class="channel-icon">f</span>
               <span>
-                <span class="channel-label">
-                  FACEBOOK
-                </span>
-
-                <span class="channel-value">
-                  facebook.com/Pg1501
-                </span>
+                <span class="channel-label">FACEBOOK</span>
+                <span class="channel-value">facebook.com/Pg1501</span>
               </span>
-
             </a>
 
           </div>
 
         </div>
 
-
         <div class="form-panel">
 
-          <h3>
-            Gửi tin nhắn
-          </h3>
+          <h3>Gửi tin nhắn</h3>
 
-          <p>
-            Form sẽ mở ứng dụng email mặc định của bạn.
-          </p>
+          <p>Form sẽ mở ứng dụng email mặc định của bạn.</p>
 
-          <form
-            id="contactForm"
-            novalidate
-          >
+          <form id="contactForm" novalidate>
 
-            <div
-              class="field"
-              id="nameField"
-            >
-
-              <label for="name">
-                Họ và tên
-              </label>
-
-              <input
-                id="name"
-                name="name"
-                type="text"
-                autocomplete="name"
-                placeholder="Nguyễn Văn A"
-              >
-
-              <div class="field-error">
-                Vui lòng nhập họ và tên.
-              </div>
-
+            <div class="field" id="nameField">
+              <label for="name">Họ và tên</label>
+              <input id="name" name="name" type="text" autocomplete="name" placeholder="Nguyễn Văn A">
+              <div class="field-error">Vui lòng nhập họ và tên.</div>
             </div>
 
-
-            <div
-              class="field"
-              id="emailField"
-            >
-
-              <label for="email">
-                Email
-              </label>
-
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                placeholder="you@example.com"
-              >
-
-              <div class="field-error">
-                Vui lòng nhập email hợp lệ.
-              </div>
-
+            <div class="field" id="emailField">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com">
+              <div class="field-error">Vui lòng nhập email hợp lệ.</div>
             </div>
-
 
             <div class="field">
-
-              <label for="phone">
-                Số điện thoại
-                <small>
-                  (không bắt buộc)
-                </small>
-              </label>
-
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                autocomplete="tel"
-                placeholder="0364556871"
-              >
-
+              <label for="phone">Số điện thoại <small>(không bắt buộc)</small></label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="0364556871">
             </div>
 
-
             <div class="field">
-
-              <label for="subject">
-                Chủ đề
-              </label>
-
-              <select
-                id="subject"
-                name="subject"
-              >
-
-                <option value="Cơ hội việc làm">
-                  Cơ hội việc làm
-                </option>
-
-                <option value="SEO">
-                  SEO
-                </option>
-
-                <option value="Website">
-                  Website
-                </option>
-
-                <option value="Shopify / E-commerce">
-                  Shopify / E-commerce
-                </option>
-
-                <option value="Khác">
-                  Khác
-                </option>
-
+              <label for="subject">Chủ đề</label>
+              <select id="subject" name="subject">
+                <option value="Cơ hội việc làm">Cơ hội việc làm</option>
+                <option value="SEO">SEO</option>
+                <option value="Website">Website</option>
+                <option value="Shopify / E-commerce">Shopify / E-commerce</option>
+                <option value="Khác">Khác</option>
               </select>
-
             </div>
 
-
-            <div
-              class="field"
-              id="messageField"
-            >
-
-              <label for="message">
-                Nội dung
-              </label>
-
-              <textarea
-                id="message"
-                name="message"
-                placeholder="Tôi muốn trao đổi với bạn về..."
-              ></textarea>
-
-              <div class="field-error">
-                Vui lòng nhập nội dung.
-              </div>
-
+            <div class="field" id="messageField">
+              <label for="message">Nội dung</label>
+              <textarea id="message" name="message" placeholder="Tôi muốn trao đổi với bạn về..."></textarea>
+              <div class="field-error">Vui lòng nhập nội dung.</div>
             </div>
 
+            <div class="form-status" id="formStatus"></div>
 
-            <div
-              class="form-status"
-              id="formStatus"
-            ></div>
-
-
-            <button
-              type="submit"
-              class="submit-btn"
-              id="submitButton"
-            >
-
-              <span id="submitText">
-                Gửi tin nhắn ↗
-              </span>
-
+            <button type="submit" class="submit-btn" id="submitButton">
+              <span id="submitText">Gửi tin nhắn ↗</span>
             </button>
 
             <p class="form-note">
@@ -4923,454 +4618,167 @@
 
   </section>
 
-
-  <!-- FOOTER -->
-
   <footer>
 
     <div class="wrap footer-inner">
 
       <div class="footer-brand">
-
-        <b>
-          NGUYỄN PHI VƯƠNG
-        </b>
-
-        <span>
-          SEO · WEBSITE · E-COMMERCE · DIGITAL GROWTH
-        </span>
-
+        <b>NGUYỄN PHI VƯƠNG</b>
+        <span>SEO · WEBSITE · E-COMMERCE · DIGITAL GROWTH</span>
       </div>
 
       <div class="footer-links">
-
-        <a
-          href="https://texasglassdoor.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Texas Glass Door ↗
-        </a>
-
-        <a
-          href="https://usacabinetsoutlet.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          USA Cabinets Outlet ↗
-        </a>
-
-        <a
-          href="https://www.facebook.com/Pg1501"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Facebook ↗
-        </a>
-
+        <a href="https://texasglassdoor.com/" target="_blank" rel="noopener noreferrer">Texas Glass Door ↗</a>
+        <a href="https://usacabinetsoutlet.com/" target="_blank" rel="noopener noreferrer">USA Cabinets Outlet ↗</a>
+        <a href="https://www.facebook.com/Pg1501" target="_blank" rel="noopener noreferrer">Facebook ↗</a>
       </div>
 
     </div>
 
   </footer>
 
-
-  <!-- FLOATING PHONE -->
-
   <div class="floating-call">
-
-    <a
-      href="tel:0364556871"
-      aria-label="Gọi cho Nguyễn Phi Vương"
-    >
-      ☎
-    </a>
-
+    <a href="tel:0364556871" aria-label="Gọi cho Nguyễn Phi Vương">☎</a>
   </div>
 
-
   <script>
-
-    /* =========================================================
-       REDUCED MOTION
-    ========================================================= */
-
-    const REDUCED =
-      window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-
-    // Gộp mọi vòng lặp canvas thành 1 requestAnimationFrame duy nhất
-    // để giảm chi phí lập lịch của trình duyệt (đỡ giật khi cuộn/tương tác)
+    const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const __drawQueue = [];
 
-
-    /* =========================================================
-       STARFIELD
-    ========================================================= */
-
+    /* STARFIELD */
     (function () {
-
-      const canvas =
-        document.getElementById("warp");
-
-      const ctx =
-        canvas.getContext("2d");
-
-      let W;
-      let H;
-      let cx;
-      let cy;
-
+      const canvas = document.getElementById("warp");
+      const ctx = canvas.getContext("2d");
+      let W, H, cx, cy;
       const DEPTH = 1100;
-
-      const STAR_COUNT =
-        window.innerWidth < 720
-          ? 180
-          : 420;
-
-      let stars = [];
-
-      let boost = 0;
-
-      let lastScrollY =
-        window.scrollY;
-
+      const STAR_COUNT = window.innerWidth < 720 ? 180 : 420;
+      let stars = [], boost = 0, lastScrollY = window.scrollY;
 
       function resize() {
-
-        const ratio =
-          window.devicePixelRatio || 1;
-
-        W =
-          canvas.width =
-          window.innerWidth * ratio;
-
-        H =
-          canvas.height =
-          window.innerHeight * ratio;
-
-        canvas.style.width =
-          window.innerWidth + "px";
-
-        canvas.style.height =
-          window.innerHeight + "px";
-
-        cx = W / 2;
-        cy = H / 2;
+        const ratio = window.devicePixelRatio || 1;
+        W = canvas.width = window.innerWidth * ratio;
+        H = canvas.height = window.innerHeight * ratio;
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
+        cx = W / 2; cy = H / 2;
       }
-
-
-      window.addEventListener(
-        "resize",
-        resize
-      );
-
+      window.addEventListener("resize", resize);
       resize();
 
-
       function makeStar(atEdge) {
-
         return {
-
-          x:
-            (Math.random() - .5)
-            * W * 1.6,
-
-          y:
-            (Math.random() - .5)
-            * H * 1.6,
-
-          z:
-            atEdge
-              ? DEPTH
-              : Math.random() * DEPTH,
-
-          tint:
-            Math.random() < .12,
-
-          phase:
-            Math.random() * Math.PI * 2,
-
-          twSpeed:
-            .02 + Math.random() * .04
-
+          x: (Math.random() - .5) * W * 1.6,
+          y: (Math.random() - .5) * H * 1.6,
+          z: atEdge ? DEPTH : Math.random() * DEPTH,
+          tint: Math.random() < .12,
+          phase: Math.random() * Math.PI * 2,
+          twSpeed: .02 + Math.random() * .04
         };
-
       }
+      for (let i = 0; i < STAR_COUNT; i++) stars.push(makeStar(false));
 
-
-      for (
-        let i = 0;
-        i < STAR_COUNT;
-        i++
-      ) {
-
-        stars.push(
-          makeStar(false)
-        );
-
-      }
-
-
-      window.addEventListener(
-        "scroll",
-        function () {
-
-          const dy =
-            window.scrollY -
-            lastScrollY;
-
-          boost +=
-            Math.min(
-              Math.abs(dy) * .06,
-              3.2
-            );
-
-          lastScrollY =
-            window.scrollY;
-
-        },
-        { passive: true }
-      );
-
+      window.addEventListener("scroll", function () {
+        const dy = window.scrollY - lastScrollY;
+        boost += Math.min(Math.abs(dy) * .06, 3.2);
+        lastScrollY = window.scrollY;
+      }, { passive: true });
 
       function draw() {
-
-        ctx.fillStyle =
-          "#020204";
-
-        ctx.fillRect(
-          0,
-          0,
-          W,
-          H
-        );
-
-
-        const speed =
-          .85 + boost;
-
+        ctx.fillStyle = "#020204";
+        ctx.fillRect(0, 0, W, H);
+        const speed = .85 + boost;
         boost *= .93;
-
-
-        const scale =
-          W * .28;
-
+        const scale = W * .28;
 
         for (const s of stars) {
-
           const prevZ = s.z;
-
           s.z -= speed;
+          if (s.z <= 1) { Object.assign(s, makeStar(true)); continue; }
 
+          const sx = cx + (s.x / s.z) * scale;
+          const sy = cy + (s.y / s.z) * scale;
+          const psx = cx + (s.x / prevZ) * scale;
+          const psy = cy + (s.y / prevZ) * scale;
 
-          if (s.z <= 1) {
+          if (sx < -50 || sx > W + 50 || sy < -50 || sy > H + 50) continue;
 
-            Object.assign(
-              s,
-              makeStar(true)
-            );
-
-            continue;
-
-          }
-
-
-          const sx =
-            cx +
-            (s.x / s.z)
-            * scale;
-
-          const sy =
-            cy +
-            (s.y / s.z)
-            * scale;
-
-          const psx =
-            cx +
-            (s.x / prevZ)
-            * scale;
-
-          const psy =
-            cy +
-            (s.y / prevZ)
-            * scale;
-
-
-          if (
-            sx < -50 ||
-            sx > W + 50 ||
-            sy < -50 ||
-            sy > H + 50
-          ) {
-            continue;
-          }
-
-
-          const depthRatio =
-            1 - s.z / DEPTH;
-
+          const depthRatio = 1 - s.z / DEPTH;
           s.phase += s.twSpeed;
+          const twinkle = .78 + Math.sin(s.phase) * .22;
+          const radius = Math.max(.4, depthRatio * 2.1 * twinkle);
+          const alpha = Math.min(1, depthRatio * 1.3 * twinkle);
 
-          const twinkle =
-            .78 + Math.sin(s.phase) * .22;
-
-          const radius =
-            Math.max(
-              .4,
-              depthRatio * 2.1 * twinkle
-            );
-
-          const alpha =
-            Math.min(
-              1,
-              depthRatio * 1.3 * twinkle
-            );
-
-
-          ctx.strokeStyle =
-            s.tint
-              ? `rgba(124,140,255,${alpha})`
-              : `rgba(255,255,255,${alpha * .85})`;
-
-          ctx.lineWidth =
-            radius;
-
+          ctx.strokeStyle = s.tint ? `rgba(124,140,255,${alpha})` : `rgba(255,255,255,${alpha * .85})`;
+          ctx.lineWidth = radius;
           ctx.beginPath();
-
-          ctx.moveTo(
-            psx,
-            psy
-          );
-
-          ctx.lineTo(
-            sx,
-            sy
-          );
-
+          ctx.moveTo(psx, psy);
+          ctx.lineTo(sx, sy);
           ctx.stroke();
-
         }
-
       }
-
-
       draw();
-
-      if (!REDUCED) {
-        __drawQueue.push(draw);
-      }
-
+      if (!REDUCED) __drawQueue.push(draw);
     })();
 
-
-    /* =========================================================
-       HERO TILT — nghiêng nhẹ theo chuột
-    ========================================================= */
-
+    /* HERO TILT */
     (function () {
-
       if (REDUCED) return;
-
       const hero = document.getElementById("home");
       if (!hero) return;
-
-      let raf = null;
-      let tx = 0, ty = 0, cx3 = 0, cy3 = 0;
+      let raf = null, tx = 0, ty = 0, cx3 = 0, cy3 = 0;
 
       window.addEventListener("mousemove", function (e) {
         const rect = hero.getBoundingClientRect();
-
         if (e.clientY < rect.top || e.clientY > rect.bottom) return;
-
         const px = (e.clientX / window.innerWidth) - .5;
         const py = (e.clientY / window.innerHeight) - .5;
-
-        tx = px * 6;
-        ty = py * -6;
-
+        tx = px * 6; ty = py * -6;
         if (!raf) tick();
       }, { passive: true });
 
       function tick() {
         cx3 += (tx - cx3) * .08;
         cy3 += (ty - cy3) * .08;
-
-        hero.style.transform =
-          `rotateX(${cy3}deg) rotateY(${cx3}deg)`;
-
+        hero.style.transform = `rotateX(${cy3}deg) rotateY(${cx3}deg)`;
         if (Math.abs(tx - cx3) > .02 || Math.abs(ty - cy3) > .02) {
           raf = requestAnimationFrame(tick);
-        } else {
-          raf = null;
-        }
+        } else { raf = null; }
       }
-
     })();
 
-
-    /* =========================================================
-       INTRO SPLASH CLEANUP
-    ========================================================= */
-
+    /* INTRO SPLASH CLEANUP */
     (function () {
       const el = document.getElementById("introSplash");
       if (!el) return;
-      setTimeout(function () {
-        el.remove();
-      }, REDUCED ? 0 : 2000);
+      setTimeout(function () { el.remove(); }, REDUCED ? 0 : 2000);
     })();
 
-
-    /* =========================================================
-       ASTEROID BELT
-    ========================================================= */
-
+    /* ASTEROID BELT */
     (function () {
-
       if (REDUCED) return;
-
       const belt = document.getElementById("asteroidBelt");
       if (!belt) return;
-
       function spawn() {
         const rock = document.createElement("div");
         rock.className = "asteroid";
-
         const size = 4 + Math.random() * 10;
         rock.style.width = size + "px";
         rock.style.height = size * (0.75 + Math.random() * .4) + "px";
         rock.style.top = (10 + Math.random() * 70) + "%";
         rock.style.setProperty("--dy", (Math.random() * 80 - 40) + "px");
         rock.style.animation = `asteroid-drift ${18 + Math.random() * 14}s linear forwards`;
-
         belt.appendChild(rock);
         setTimeout(() => rock.remove(), 34000);
       }
-
-      for (let i = 0; i < 3; i++) {
-        setTimeout(spawn, i * 4000);
-      }
-
+      for (let i = 0; i < 3; i++) setTimeout(spawn, i * 4000);
       setInterval(spawn, 9000);
-
     })();
 
-
-    /* =========================================================
-       SPOTLIGHT HOVER
-    ========================================================= */
-
+    /* SPOTLIGHT HOVER */
     (function () {
-
-      const targets = document.querySelectorAll(
-        ".cap-cell, .project-detail, .metric, .profile-card, .process-card"
-      );
-
+      const targets = document.querySelectorAll(".cap-cell, .project-detail, .metric, .profile-card, .process-card");
       targets.forEach(function (el) {
         el.classList.add("spotlight-target");
-
         el.addEventListener("mousemove", function (e) {
           const rect = el.getBoundingClientRect();
           const mx = ((e.clientX - rect.left) / rect.width) * 100;
@@ -5379,30 +4787,15 @@
           el.style.setProperty("--my", my + "%");
         });
       });
-
     })();
 
-
-    /* =========================================================
-       NEBULA — mây bụi thiên hà trôi chậm phía sau ngôi sao
-    ========================================================= */
-
+    /* NEBULA */
     (function () {
-
       const canvas = document.getElementById("nebula");
       const ctx = canvas.getContext("2d");
-
       let W, H;
-
       const CLOUDS = window.innerWidth < 720 ? 4 : 7;
-
-      const palette = [
-        "124,140,255",
-        "63,232,207",
-        "185,195,255",
-        "255,255,255"
-      ];
-
+      const palette = ["124,140,255", "63,232,207", "185,195,255", "255,255,255"];
       let blobs = [];
 
       function resize() {
@@ -5412,129 +4805,80 @@
         canvas.style.width = window.innerWidth + "px";
         canvas.style.height = window.innerHeight + "px";
       }
-
       window.addEventListener("resize", resize);
       resize();
 
       function makeBlob() {
         return {
-          x: Math.random() * W,
-          y: Math.random() * H,
+          x: Math.random() * W, y: Math.random() * H,
           r: (Math.random() * .28 + .18) * Math.max(W, H),
           color: palette[Math.floor(Math.random() * palette.length)],
-          vx: (Math.random() - .5) * .04,
-          vy: (Math.random() - .5) * .04,
-          alpha: Math.random() * .05 + .035,
-          pulse: Math.random() * Math.PI * 2
+          vx: (Math.random() - .5) * .04, vy: (Math.random() - .5) * .04,
+          alpha: Math.random() * .05 + .035, pulse: Math.random() * Math.PI * 2
         };
       }
-
       for (let i = 0; i < CLOUDS; i++) blobs.push(makeBlob());
 
       function draw() {
         ctx.clearRect(0, 0, W, H);
-
         for (const b of blobs) {
-          b.x += b.vx;
-          b.y += b.vy;
-          b.pulse += .003;
-
+          b.x += b.vx; b.y += b.vy; b.pulse += .003;
           if (b.x < -b.r) b.x = W + b.r;
           if (b.x > W + b.r) b.x = -b.r;
           if (b.y < -b.r) b.y = H + b.r;
           if (b.y > H + b.r) b.y = -b.r;
-
           const a = b.alpha + Math.sin(b.pulse) * .012;
-
           const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
           g.addColorStop(0, `rgba(${b.color},${a})`);
           g.addColorStop(1, `rgba(${b.color},0)`);
-
           ctx.fillStyle = g;
           ctx.beginPath();
           ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
           ctx.fill();
         }
       }
-
       draw();
       if (!REDUCED) __drawQueue.push(draw);
-
     })();
 
-
-    /* =========================================================
-       SHOOTING STARS — sao băng ngẫu nhiên
-    ========================================================= */
-
+    /* SHOOTING STARS */
     (function () {
-
       if (REDUCED) return;
-
       const container = document.getElementById("shootingStars");
-
       function spawn() {
-
         const star = document.createElement("div");
         star.className = "shooting-star";
-
         const startX = Math.random() * window.innerWidth * .7;
         const startY = Math.random() * window.innerHeight * .35;
-
         const travel = 260 + Math.random() * 260;
         const angle = (18 + Math.random() * 18) * (Math.PI / 180);
-
         const sx = Math.cos(angle) * travel;
         const sy = Math.sin(angle) * travel;
-
         star.style.left = startX + "px";
         star.style.top = startY + "px";
         star.style.setProperty("--sx", sx + "px");
         star.style.setProperty("--sy", sy + "px");
         star.style.animation = `shoot ${1.1 + Math.random() * .6}s ease-in forwards`;
-
         container.appendChild(star);
-
         setTimeout(() => star.remove(), 2200);
       }
-
       function scheduleNext() {
         const delay = 2600 + Math.random() * 5200;
-        setTimeout(() => {
-          spawn();
-          scheduleNext();
-        }, delay);
+        setTimeout(() => { spawn(); scheduleNext(); }, delay);
       }
-
       scheduleNext();
-
     })();
 
-
-    /* =========================================================
-       CURSOR GLOW — quầng sáng bụi sao theo chuột
-    ========================================================= */
-
+    /* CURSOR GLOW */
     (function () {
-
       if (REDUCED) return;
-
       const glow = document.getElementById("cursorGlow");
       if (!glow) return;
-
-      let raf = null;
-      let tx = 0, ty = 0, cx2 = 0, cy2 = 0;
-      let active = false;
+      let raf = null, tx = 0, ty = 0, cx2 = 0, cy2 = 0, active = false;
 
       window.addEventListener("mousemove", function (e) {
-        tx = e.clientX;
-        ty = e.clientY;
-
-        if (!active) {
-          active = true;
-          glow.classList.add("active");
-        }
-
+        tx = e.clientX; ty = e.clientY;
+        if (!active) { active = true; glow.classList.add("active"); }
         if (!raf) tick();
       }, { passive: true });
 
@@ -5546,29 +4890,17 @@
       function tick() {
         cx2 += (tx - cx2) * .12;
         cy2 += (ty - cy2) * .12;
-
-        glow.style.transform =
-          `translate(${cx2}px, ${cy2}px) translate(-50%, -50%)`;
-
+        glow.style.transform = `translate(${cx2}px, ${cy2}px) translate(-50%, -50%)`;
         if (Math.abs(tx - cx2) > .3 || Math.abs(ty - cy2) > .3) {
           raf = requestAnimationFrame(tick);
-        } else {
-          raf = null;
-        }
+        } else { raf = null; }
       }
-
     })();
 
-
-    /* =========================================================
-       DUST — bụi vũ trụ lấp lánh phủ toàn trang
-    ========================================================= */
-
+    /* DUST */
     (function () {
-
       const canvas = document.getElementById("dust");
       const ctx = canvas.getContext("2d");
-
       let W, H;
       const COUNT = window.innerWidth < 720 ? 60 : 130;
       let particles = [];
@@ -5580,74 +4912,47 @@
         canvas.style.width = window.innerWidth + "px";
         canvas.style.height = window.innerHeight + "px";
       }
-
       window.addEventListener("resize", resize);
       resize();
 
       function makeParticle() {
         return {
-          x: Math.random() * W,
-          y: Math.random() * H,
+          x: Math.random() * W, y: Math.random() * H,
           r: Math.random() * 1.3 + .3,
-          vx: (Math.random() - .5) * .12,
-          vy: (Math.random() - .5) * .12,
-          tw: Math.random() * Math.PI * 2,
-          speed: Math.random() * .02 + .01,
-          tint: Math.random() < .15
-            ? "63,232,207"
-            : Math.random() < .3
-              ? "124,140,255"
-              : "255,255,255"
+          vx: (Math.random() - .5) * .12, vy: (Math.random() - .5) * .12,
+          tw: Math.random() * Math.PI * 2, speed: Math.random() * .02 + .01,
+          tint: Math.random() < .15 ? "63,232,207" : Math.random() < .3 ? "124,140,255" : "255,255,255"
         };
       }
-
       for (let i = 0; i < COUNT; i++) particles.push(makeParticle());
 
-      let cachedLines = [];
-      let frameCount = 0;
-
+      let cachedLines = [], frameCount = 0;
       function computeLines() {
         const maxDist = W * .045;
         const lines = [];
-
         for (let i = 0; i < particles.length; i++) {
           const a = particles[i];
-
           for (let j = i + 1; j < particles.length; j++) {
             const b = particles[j];
-
-            const dx = a.x - b.x;
-            const dy = a.y - b.y;
-            const d2 = dx * dx + dy * dy;
-
+            const dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
             if (d2 < maxDist * maxDist) {
               const d = Math.sqrt(d2);
               lines.push([a.x, a.y, b.x, b.y, (1 - d / maxDist) * .12]);
             }
           }
         }
-
         cachedLines = lines;
       }
 
       function draw() {
         ctx.clearRect(0, 0, W, H);
-
         for (const p of particles) {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.tw += p.speed;
-
-          if (p.x < 0) p.x = W;
-          if (p.x > W) p.x = 0;
-          if (p.y < 0) p.y = H;
-          if (p.y > H) p.y = 0;
+          p.x += p.vx; p.y += p.vy; p.tw += p.speed;
+          if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+          if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
         }
-
-        // chỉ tính lại đường nối chòm sao mỗi 3 khung hình để giảm tải CPU
         frameCount++;
         if (frameCount % 3 === 0) computeLines();
-
         ctx.lineWidth = 1;
         for (const l of cachedLines) {
           ctx.strokeStyle = `rgba(180,190,255,${l[4]})`;
@@ -5656,682 +4961,232 @@
           ctx.lineTo(l[2], l[3]);
           ctx.stroke();
         }
-
         for (const p of particles) {
           const alpha = .35 + Math.sin(p.tw) * .35;
-
           ctx.beginPath();
           ctx.fillStyle = `rgba(${p.tint},${Math.max(0, alpha)})`;
           ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
           ctx.fill();
         }
       }
-
       draw();
       if (!REDUCED) __drawQueue.push(draw);
-
     })();
 
-
-    /* =========================================================
-       COSMOS PARALLAX — mặt trời/mặt trăng/hành tinh trôi theo cuộn trang
-    ========================================================= */
-
+    /* COSMOS PARALLAX */
     (function () {
-
       const layer = document.getElementById("cosmosLayer");
       if (!layer) return;
-
-      const bodies = Array.from(
-        layer.querySelectorAll(".celestial")
-      ).map(function (el, i) {
-        return {
-          el: el,
-          depth: parseFloat(el.dataset.depth || .2),
-          amp: 8 + (i % 3) * 4,
-          freq: .00012 + i * .00003,
-          phase: i * 1.7
-        };
+      const bodies = Array.from(layer.querySelectorAll(".celestial")).map(function (el, i) {
+        return { el: el, depth: parseFloat(el.dataset.depth || .2), amp: 8 + (i % 3) * 4, freq: .00012 + i * .00003, phase: i * 1.7 };
       });
-
       let smoothY = window.scrollY;
 
       function frame(t) {
         const targetY = window.scrollY;
         smoothY += (targetY - smoothY) * .12;
-
         for (const b of bodies) {
           const floatY = Math.sin((t || 0) * b.freq + b.phase) * b.amp;
           const floatX = Math.cos((t || 0) * b.freq * .8 + b.phase) * (b.amp * .6);
           const y = (-smoothY * b.depth) + floatY;
-
-          b.el.style.transform =
-            `translate3d(${floatX.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+          b.el.style.transform = `translate3d(${floatX.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
         }
       }
-
       if (!REDUCED) __drawQueue.push(frame);
-
     })();
 
-
-    /* =========================================================
-       MASTER LOOP — 1 requestAnimationFrame duy nhất cho mọi hiệu ứng canvas/JS
-    ========================================================= */
-
+    /* MASTER LOOP */
     if (__drawQueue.length && !REDUCED) {
       requestAnimationFrame(function masterLoop(t) {
-        for (let i = 0; i < __drawQueue.length; i++) {
-          __drawQueue[i](t);
-        }
+        for (let i = 0; i < __drawQueue.length; i++) __drawQueue[i](t);
         requestAnimationFrame(masterLoop);
       });
     }
 
-
-    /* =========================================================
-       HUD
-    ========================================================= */
-
-    const hudPct =
-      document.getElementById(
-        "hudPct"
-      );
-
-    const hudDepth =
-      document.getElementById(
-        "hudDepth"
-      );
-
-
+    /* HUD */
+    const hudPct = document.getElementById("hudPct");
+    const hudDepth = document.getElementById("hudDepth");
     function updateHud() {
-
-      const max =
-        document.documentElement
-          .scrollHeight -
-        window.innerHeight;
-
-
-      const pct =
-        max > 0
-          ? Math.min(
-              100,
-              Math.round(
-                (window.scrollY / max)
-                * 100
-              )
-            )
-          : 0;
-
-
-      hudPct.textContent =
-        String(pct)
-          .padStart(2, "0")
-        + "%";
-
-
-      hudDepth.textContent =
-        String(
-          Math.round(pct * 8.4)
-        ).padStart(4, "0");
-
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.min(100, Math.round((window.scrollY / max) * 100)) : 0;
+      hudPct.textContent = String(pct).padStart(2, "0") + "%";
+      hudDepth.textContent = String(Math.round(pct * 8.4)).padStart(4, "0");
     }
-
-
-    window.addEventListener(
-      "scroll",
-      updateHud,
-      { passive: true }
-    );
-
+    window.addEventListener("scroll", updateHud, { passive: true });
     updateHud();
 
+    /* NAV */
+    const navbar = document.getElementById("navbar");
+    window.addEventListener("scroll", function () {
+      navbar.classList.toggle("scrolled", window.scrollY > 20);
+    }, { passive: true });
 
-    /* =========================================================
-       NAV
-    ========================================================= */
-
-    const navbar =
-      document.getElementById(
-        "navbar"
-      );
-
-
-    window.addEventListener(
-      "scroll",
-      function () {
-
-        navbar.classList.toggle(
-          "scrolled",
-          window.scrollY > 20
-        );
-
-      },
-      { passive: true }
-    );
-
-
-    /* =========================================================
-       MOBILE MENU
-    ========================================================= */
-
-    const menuButton =
-      document.getElementById(
-        "menuButton"
-      );
-
-    const mobileMenu =
-      document.getElementById(
-        "mobileMenu"
-      );
-
-    const menuIcon =
-      document.getElementById(
-        "menuIcon"
-      );
-
-
-    menuButton.addEventListener(
-      "click",
-      function () {
-
-        const open =
-          mobileMenu.classList.toggle(
-            "open"
-          );
-
-        document.body.classList.toggle(
-          "menu-open",
-          open
-        );
-
-        menuButton.setAttribute(
-          "aria-expanded",
-          String(open)
-        );
-
-        menuIcon.textContent =
-          open
-            ? "×"
-            : "☰";
-
-      }
-    );
-
-
-    document
-      .querySelectorAll(".mobile-link")
-      .forEach(function (link) {
-
-        link.addEventListener(
-          "click",
-          function () {
-
-            mobileMenu.classList.remove(
-              "open"
-            );
-
-            document.body.classList.remove(
-              "menu-open"
-            );
-
-            menuIcon.textContent =
-              "☰";
-
-            menuButton.setAttribute(
-              "aria-expanded",
-              "false"
-            );
-
-          }
-        );
-
+    /* MOBILE MENU */
+    const menuButton = document.getElementById("menuButton");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const menuIcon = document.getElementById("menuIcon");
+    menuButton.addEventListener("click", function () {
+      const open = mobileMenu.classList.toggle("open");
+      document.body.classList.toggle("menu-open", open);
+      menuButton.setAttribute("aria-expanded", String(open));
+      menuIcon.textContent = open ? "×" : "☰";
+    });
+    document.querySelectorAll(".mobile-link").forEach(function (link) {
+      link.addEventListener("click", function () {
+        mobileMenu.classList.remove("open");
+        document.body.classList.remove("menu-open");
+        menuIcon.textContent = "☰";
+        menuButton.setAttribute("aria-expanded", "false");
       });
+    });
 
+    /* HERO PLAY */
+    requestAnimationFrame(function () {
+      document.querySelector(".hero").classList.add("play");
+    });
 
-    /* =========================================================
-       HERO
-    ========================================================= */
-
-    requestAnimationFrame(
-      function () {
-
-        document
-          .querySelector(".hero")
-          .classList.add("play");
-
-      }
-    );
-
-
-    /* =========================================================
-       SECTION REVEAL
-    ========================================================= */
-
-    const fadeEls =
-      document.querySelectorAll(
-        ".fade-in"
-      );
-
-
-    const fadeObserver =
-      new IntersectionObserver(
-        function (entries) {
-
-          entries.forEach(
-            function (entry) {
-
-              if (
-                entry.isIntersecting
-              ) {
-
-                entry.target
-                  .classList
-                  .add("show");
-
-                fadeObserver.unobserve(
-                  entry.target
-                );
-
-              }
-
-            }
-          );
-
-        },
-        {
-          threshold: .08
+    /* SECTION REVEAL */
+    const fadeEls = document.querySelectorAll(".fade-in");
+    const fadeObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+          fadeObserver.unobserve(entry.target);
         }
-      );
-
-
-    fadeEls.forEach(
-      function (el) {
-
-        fadeObserver.observe(el);
-
-      }
-    );
-
-
-    /* =========================================================
-       ACTIVE NAV
-    ========================================================= */
-
-    const sections =
-      document.querySelectorAll(
-        "section[id]"
-      );
-
-    const navLinks =
-      document.querySelectorAll(
-        ".nav-link"
-      );
-
-
-    const sectionObserver =
-      new IntersectionObserver(
-        function (entries) {
-
-          entries.forEach(
-            function (entry) {
-
-              if (
-                entry.isIntersecting
-              ) {
-
-                const id =
-                  entry.target
-                    .getAttribute(
-                      "id"
-                    );
-
-
-                navLinks.forEach(
-                  function (link) {
-
-                    link.classList.toggle(
-                      "active",
-                      link.getAttribute(
-                        "href"
-                      ) === "#" + id
-                    );
-
-                  }
-                );
-
-                // Chớp sáng nhẹ khi bước vào section mới
-                const flashEl =
-                  document.getElementById("sectionFlash");
-
-                if (flashEl && !REDUCED) {
-                  flashEl.classList.remove("pulse");
-                  void flashEl.offsetWidth;
-                  flashEl.classList.add("pulse");
-                }
-
-              }
-
-            }
-          );
-
-        },
-        {
-          rootMargin:
-            "-35% 0px -55% 0px"
-        }
-      );
-
-
-    sections.forEach(
-      function (section) {
-
-        sectionObserver.observe(
-          section
-        );
-
-      }
-    );
-
-
-    /* =========================================================
-       CONTACT FORM
-    ========================================================= */
-
-    const form =
-      document.getElementById(
-        "contactForm"
-      );
-
-    const submitButton =
-      document.getElementById(
-        "submitButton"
-      );
-
-    const submitText =
-      document.getElementById(
-        "submitText"
-      );
-
-    const formStatus =
-      document.getElementById(
-        "formStatus"
-      );
-
-    const nameInput =
-      document.getElementById(
-        "name"
-      );
-
-    const emailInput =
-      document.getElementById(
-        "email"
-      );
-
-    const phoneInput =
-      document.getElementById(
-        "phone"
-      );
-
-    const subjectInput =
-      document.getElementById(
-        "subject"
-      );
-
-    const messageInput =
-      document.getElementById(
-        "message"
-      );
-
-
-    const nameField =
-      document.getElementById(
-        "nameField"
-      );
-
-    const emailField =
-      document.getElementById(
-        "emailField"
-      );
-
-    const messageField =
-      document.getElementById(
-        "messageField"
-      );
-
-
-    function validEmail(email) {
-
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        .test(email);
-
-    }
-
-
-    form.addEventListener(
-      "submit",
-      function (e) {
-
-        e.preventDefault();
-
-        let valid = true;
-
-
-        if (
-          nameInput.value.trim() === ""
-        ) {
-
-          nameField.classList.add(
-            "error"
-          );
-
-          valid = false;
-
-        } else {
-
-          nameField.classList.remove(
-            "error"
-          );
-
-        }
-
-
-        if (
-          emailInput.value.trim() === "" ||
-          !validEmail(
-            emailInput.value.trim()
-          )
-        ) {
-
-          emailField.classList.add(
-            "error"
-          );
-
-          valid = false;
-
-        } else {
-
-          emailField.classList.remove(
-            "error"
-          );
-
-        }
-
-
-        if (
-          messageInput.value.trim() === ""
-        ) {
-
-          messageField.classList.add(
-            "error"
-          );
-
-          valid = false;
-
-        } else {
-
-          messageField.classList.remove(
-            "error"
-          );
-
-        }
-
-
-        if (!valid) {
-
-          formStatus.classList.remove(
-            "show"
-          );
-
-          return;
-
-        }
-
-
-        submitButton.disabled = true;
-
-        submitText.textContent =
-          "Đang chuẩn bị email...";
-
-
-        const name =
-          nameInput.value.trim();
-
-        const email =
-          emailInput.value.trim();
-
-        const phone =
-          phoneInput.value.trim() ||
-          "Không cung cấp";
-
-        const subject =
-          subjectInput.value;
-
-        const message =
-          messageInput.value.trim();
-
-
-        const emailSubject =
-          encodeURIComponent(
-            "[Portfolio] "
-            + subject
-            + " — "
-            + name
-          );
-
-
-        const emailBody =
-          encodeURIComponent(
-            "Xin chào Nguyễn Phi Vương,\n\n"
-            + "Tôi muốn liên hệ với bạn từ portfolio.\n\n"
-            + "Họ và tên: "
-            + name
-            + "\nEmail: "
-            + email
-            + "\nSố điện thoại: "
-            + phone
-            + "\nChủ đề: "
-            + subject
-            + "\n\nNội dung:\n"
-            + message
-            + "\n\n---\n"
-            + "Tin nhắn được gửi từ portfolio "
-            + "của Nguyễn Phi Vương."
-          );
-
-
-        const mailto =
-          "mailto:vuongnpps40933@gmail.com"
-          + "?subject="
-          + emailSubject
-          + "&body="
-          + emailBody;
-
-
-        setTimeout(
-          function () {
-
-            window.location.href =
-              mailto;
-
-
-            formStatus.textContent =
-              "Đã chuẩn bị email. "
-              + "Nếu ứng dụng email chưa mở, "
-              + "hãy liên hệ trực tiếp qua "
-              + "vuongnpps40933@gmail.com.";
-
-
-            formStatus.classList.add(
-              "show"
-            );
-
-
-            submitButton.disabled =
-              false;
-
-            submitText.textContent =
-              "Gửi tin nhắn ↗";
-
-          },
-          400
-        );
-
-      }
-    );
-
-
-    [
-      [nameInput, nameField],
-      [emailInput, emailField],
-      [messageInput, messageField]
-    ].forEach(
-      function (pair) {
-
-        pair[0].addEventListener(
-          "input",
-          function () {
-
-            if (
-              pair[0].value.trim()
-            ) {
-
-              pair[1].classList.remove(
-                "error"
-              );
-
-            }
-
+      });
+    }, { threshold: .08 });
+    fadeEls.forEach(function (el) { fadeObserver.observe(el); });
+
+    /* ACTIVE NAV */
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll(".nav-link");
+    const sectionObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute("id");
+          navLinks.forEach(function (link) {
+            link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+          });
+          const flashEl = document.getElementById("sectionFlash");
+          if (flashEl && !REDUCED) {
+            flashEl.classList.remove("pulse");
+            void flashEl.offsetWidth;
+            flashEl.classList.add("pulse");
           }
-        );
+        }
+      });
+    }, { rootMargin: "-35% 0px -55% 0px" });
+    sections.forEach(function (section) { sectionObserver.observe(section); });
+  </script>
 
+  <script>
+    /* CONTACT FORM */
+    const form = document.getElementById("contactForm");
+    const submitButton = document.getElementById("submitButton");
+    const submitText = document.getElementById("submitText");
+    const formStatus = document.getElementById("formStatus");
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const phoneInput = document.getElementById("phone");
+    const subjectInput = document.getElementById("subject");
+    const messageInput = document.getElementById("message");
+    const nameField = document.getElementById("nameField");
+    const emailField = document.getElementById("emailField");
+    const messageField = document.getElementById("messageField");
+
+    function validEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      let valid = true;
+
+      if (nameInput.value.trim() === "") { nameField.classList.add("error"); valid = false; }
+      else { nameField.classList.remove("error"); }
+
+      if (emailInput.value.trim() === "" || !validEmail(emailInput.value.trim())) { emailField.classList.add("error"); valid = false; }
+      else { emailField.classList.remove("error"); }
+
+      if (messageInput.value.trim() === "") { messageField.classList.add("error"); valid = false; }
+      else { messageField.classList.remove("error"); }
+
+      if (!valid) { formStatus.classList.remove("show"); return; }
+
+      submitButton.disabled = true;
+      submitText.textContent = "Đang chuẩn bị email...";
+
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const phone = phoneInput.value.trim() || "Không cung cấp";
+      const subject = subjectInput.value;
+      const message = messageInput.value.trim();
+
+      const bodyPlain =
+        "Xin chào Nguyễn Phi Vương,\n\n" +
+        "Tôi muốn liên hệ với bạn từ portfolio.\n\n" +
+        "Họ và tên: " + name +
+        "\nEmail: " + email +
+        "\nSố điện thoại: " + phone +
+        "\nChủ đề: " + subject +
+        "\n\nNội dung:\n" + message +
+        "\n\n---\nTin nhắn được gửi từ portfolio của Nguyễn Phi Vương.";
+
+      const emailSubject = encodeURIComponent("[Portfolio] " + subject + " — " + name);
+      const emailBody = encodeURIComponent(bodyPlain);
+
+      /* Mở thẳng Gmail compose trên trình duyệt — hoạt động ổn định hơn nhiều so với
+         mailto: (vốn phụ thuộc vào ứng dụng email mặc định của máy, thường không cài sẵn). */
+      const gmailComposeUrl =
+        "https://mail.google.com/mail/?view=cm&fs=1&to=vuongnpps40933@gmail.com" +
+        "&su=" + emailSubject + "&body=" + emailBody;
+
+      /* QUAN TRỌNG: window.open() phải gọi NGAY trong lúc xử lý sự kiện click,
+         không được đặt trong setTimeout — nếu không trình duyệt (đặc biệt Chrome)
+         sẽ coi đây là popup không do người dùng chủ động mở và chặn lại,
+         chỉ hiện tab trống thay vì điều hướng tới Gmail. */
+      window.open(gmailComposeUrl, "_blank", "noopener,noreferrer");
+
+      /* Sao chép nội dung vào clipboard làm phương án dự phòng, phòng khi popup bị chặn
+         hoặc người dùng muốn dán sang ứng dụng email khác. */
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(bodyPlain).catch(function () {});
       }
-    );
 
+      setTimeout(function () {
+        formStatus.textContent = "Đã mở Gmail với nội dung soạn sẵn trong tab mới. Nếu tab không tự mở (do trình duyệt chặn popup), nội dung đã được sao chép — bạn có thể dán trực tiếp vào email gửi tới vuongnpps40933@gmail.com.";
+        formStatus.classList.add("show");
+        submitButton.disabled = false;
+        submitText.textContent = "Gửi tin nhắn ↗";
 
-    /* =========================================================
-       FX TOGGLE — công tắc bật/tắt hiệu ứng nền vũ trụ
-    ========================================================= */
+        if (window.__showToast) {
+          window.__showToast("✅", "Đã mở Gmail soạn sẵn nội dung — kiểm tra tab mới nhé!");
+        }
 
+        if (window.__triggerSupernovaBurst) {
+          const btnRect = submitButton.getBoundingClientRect();
+          window.__triggerSupernovaBurst(btnRect.left + btnRect.width / 2, btnRect.top + btnRect.height / 2);
+        }
+      }, 400);
+    });
+
+    [[nameInput, nameField], [emailInput, emailField], [messageInput, messageField]].forEach(function (pair) {
+      pair[0].addEventListener("input", function () {
+        if (pair[0].value.trim()) pair[1].classList.remove("error");
+      });
+    });
+
+    /* FX TOGGLE */
     (function () {
-
       const btn = document.getElementById("fxToggle");
       if (!btn) return;
-
       const label = btn.querySelector(".fx-toggle-label");
-
       let off = false;
-
-      try {
-        off = localStorage.getItem("fxOff") === "1";
-      } catch (e) {}
+      try { off = localStorage.getItem("fxOff") === "1"; } catch (e) {}
 
       function apply() {
         document.body.classList.toggle("fx-off", off);
         btn.setAttribute("aria-pressed", String(!off));
         if (label) label.textContent = "Thiên hà: " + (off ? "Tắt" : "Bật");
       }
-
       apply();
 
       btn.addEventListener("click", function () {
@@ -6339,349 +5194,215 @@
         apply();
         try { localStorage.setItem("fxOff", off ? "1" : "0"); } catch (e) {}
       });
-
     })();
 
-
-    /* =========================================================
-       PARTICLE BURST — hạt sao bắn ra khi hover nút CTA
-    ========================================================= */
-
+    /* PARTICLE BURST */
     (function () {
-
       if (REDUCED) return;
-
-      const ctaEls = document.querySelectorAll(
-        ".btn-primary, .nav-cta"
-      );
-
+      const ctaEls = document.querySelectorAll(".btn-primary, .nav-cta");
       if (!ctaEls.length) return;
 
       function burst(x, y) {
         const count = 10;
-
         for (let i = 0; i < count; i++) {
           const p = document.createElement("div");
           p.className = "burst-particle";
-
           const angle = (Math.PI * 2 * i) / count + Math.random() * .4;
           const dist = 40 + Math.random() * 40;
-
           p.style.left = x + "px";
           p.style.top = y + "px";
           p.style.setProperty("--bx", (Math.cos(angle) * dist).toFixed(1) + "px");
           p.style.setProperty("--by", (Math.sin(angle) * dist).toFixed(1) + "px");
-
-          // Dọn phần tử ngay khi animation kết thúc — không phụ thuộc setTimeout
-          p.addEventListener("animationend", function () {
-            p.remove();
-          });
-
+          p.addEventListener("animationend", function () { p.remove(); });
           document.body.appendChild(p);
         }
       }
-
       ctaEls.forEach(function (el) {
         el.addEventListener("mouseenter", function () {
           const rect = el.getBoundingClientRect();
-
-          // Bỏ qua nếu phần tử chưa render đúng kích thước (tránh bắn tại 0,0)
           if (rect.width === 0 && rect.height === 0) return;
-
           burst(rect.left + rect.width / 2, rect.top + rect.height / 2);
         });
       });
-
     })();
 
-
-    /* =========================================================
-       PROJECT TILT 3D — nghiêng theo con trỏ khi hover thẻ dự án
-    ========================================================= */
-
+    /* PROJECT TILT 3D — ĐÃ TẮT: gây chồng lấn hình ảnh giữa các card khi ảnh lớn (320px) */
     (function () {
+      return; // tắt hẳn hiệu ứng nghiêng 3D cho tất cả card dự án
+    })();
 
-      if (REDUCED) return;
+    /* THUMB SLIDER — tự động chuyển đổi Trước ⇄ Sau theo chu kỳ */
+    (function () {
+      document.querySelectorAll(".project-thumb-slider").forEach(function (slider) {
+        const items = slider.querySelectorAll(".slider-item");
+        if (items.length < 2) return;
 
-      const cards = document.querySelectorAll(".project");
-
-      cards.forEach(function (card) {
-
-        card.addEventListener("mousemove", function (e) {
-          const rect = card.getBoundingClientRect();
-          const px = (e.clientX - rect.left) / rect.width - .5;
-          const py = (e.clientY - rect.top) / rect.height - .5;
-
-          card.style.transform =
-            `perspective(900px) rotateX(${(py * -2.5).toFixed(2)}deg) rotateY(${(px * 2.5).toFixed(2)}deg)`;
-        });
-
-        card.addEventListener("mouseleave", function () {
-          card.style.transform = "perspective(900px) rotateX(0) rotateY(0)";
-        });
-
+        let idx = 0;
+        setInterval(function () {
+          items[idx].classList.remove("active");
+          idx = (idx + 1) % items.length;
+          items[idx].classList.add("active");
+        }, 2800);
       });
-
     })();
 
-
-    /* =========================================================
-       WORMHOLE — hiệu ứng khi bấm vào logo
-    ========================================================= */
-
+    /* WORMHOLE */
     (function () {
-
       const brand = document.querySelector(".brand");
       const overlay = document.getElementById("wormholeOverlay");
-
       if (!brand || !overlay || REDUCED) return;
 
       brand.addEventListener("click", function (e) {
-        // Chỉ chạy hiệu ứng khi đang không ở đầu trang (tránh spam lúc đã ở home)
         if (window.scrollY < 40) return;
-
         e.preventDefault();
-
         overlay.innerHTML = "";
-
         for (let i = 0; i < 4; i++) {
           const ring = document.createElement("div");
           ring.className = "ring";
           ring.style.animationDelay = (i * 0.08) + "s";
           overlay.appendChild(ring);
         }
-
-        setTimeout(function () {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }, 180);
-
-        setTimeout(function () {
-          overlay.innerHTML = "";
-        }, 1100);
+        setTimeout(function () { window.scrollTo({ top: 0, behavior: "smooth" }); }, 180);
+        setTimeout(function () { overlay.innerHTML = ""; }, 1100);
       });
-
     })();
 
-
-    /* =========================================================
-       MƯA SAO BĂNG — kích hoạt trực tiếp bằng nút bấm
-       (thay cho Konami code khó nhớ)
-    ========================================================= */
-
+    /* MƯA SAO BĂNG */
     (function () {
-
       const btn = document.getElementById("meteorBtn");
       if (!btn) return;
-
       function triggerMeteorShower() {
         const container = document.getElementById("shootingStars");
-        if (!container) return;
-
-        if (REDUCED) return;
-
+        if (!container || REDUCED) return;
         btn.disabled = true;
-
         let n = 0;
         const id = setInterval(function () {
           const star = document.createElement("div");
           star.className = "shooting-star";
-
           const startX = Math.random() * window.innerWidth * .8;
           const startY = Math.random() * window.innerHeight * .3;
           const travel = 260 + Math.random() * 260;
           const angle = (18 + Math.random() * 18) * (Math.PI / 180);
-
           star.style.left = startX + "px";
           star.style.top = startY + "px";
           star.style.setProperty("--sx", (Math.cos(angle) * travel) + "px");
           star.style.setProperty("--sy", (Math.sin(angle) * travel) + "px");
           star.style.animation = "shoot .6s ease-in forwards";
-
-          star.addEventListener("animationend", function () {
-            star.remove();
-          });
-
+          star.addEventListener("animationend", function () { star.remove(); });
           container.appendChild(star);
-
           n++;
-          if (n > 30) {
-            clearInterval(id);
-            btn.disabled = false;
-          }
+          if (n > 30) { clearInterval(id); btn.disabled = false; }
         }, 90);
       }
-
       btn.addEventListener("click", triggerMeteorShower);
-
     })();
 
-
-    /* =========================================================
-       STAR TRAIL — vệt sao theo chuyển động chuột
-    ========================================================= */
-
+    /* STAR TRAIL */
     (function () {
-
       if (REDUCED) return;
-
       let last = 0;
-
       window.addEventListener("mousemove", function (e) {
         const now = Date.now();
-        if (now - last < 45) return; // giới hạn tần suất để nhẹ máy
+        if (now - last < 45) return;
         last = now;
-
         const dot = document.createElement("div");
         dot.className = "star-trail-dot";
         dot.style.left = e.clientX + "px";
         dot.style.top = e.clientY + "px";
-
-        dot.addEventListener("animationend", function () {
-          dot.remove();
-        });
-
+        dot.addEventListener("animationend", function () { dot.remove(); });
         document.body.appendChild(dot);
       }, { passive: true });
-
     })();
 
-
-    /* =========================================================
-       CLICK NOVA — hiệu ứng vũ trụ khi click bất kỳ đâu
-    ========================================================= */
-
+    /* CLICK NOVA */
     (function () {
-
       window.addEventListener("click", function (e) {
-
-        // Bỏ qua click vào các control đã có hiệu ứng riêng, tránh chồng lặp
         if (e.target.closest(".fx-toggle, .meteor-btn, .brand")) return;
-
-        const x = e.clientX;
-        const y = e.clientY;
-
+        const x = e.clientX, y = e.clientY;
         const nova = document.createElement("div");
         nova.className = "click-nova";
         nova.style.left = x + "px";
         nova.style.top = y + "px";
-
-        nova.addEventListener("animationend", function () {
-          nova.remove();
-        });
-
+        nova.addEventListener("animationend", function () { nova.remove(); });
         document.body.appendChild(nova);
-
         if (REDUCED) return;
-
         const sparkCount = 6;
         for (let i = 0; i < sparkCount; i++) {
           const s = document.createElement("div");
           s.className = "click-nova-spark";
-
           const angle = (Math.PI * 2 * i) / sparkCount + Math.random() * .5;
           const dist = 22 + Math.random() * 26;
-
           s.style.left = x + "px";
           s.style.top = y + "px";
           s.style.setProperty("--bx", (Math.cos(angle) * dist).toFixed(1) + "px");
           s.style.setProperty("--by", (Math.sin(angle) * dist).toFixed(1) + "px");
-
-          s.addEventListener("animationend", function () {
-            s.remove();
-          });
-
+          s.addEventListener("animationend", function () { s.remove(); });
           document.body.appendChild(s);
         }
-
       }, { passive: true });
-
     })();
 
-
-    /* =========================================================
-       SUPERNOVA — sao bùng sáng ngẫu nhiên đâu đó trên màn hình
-    ========================================================= */
-
+    /* SUPERNOVA */
     (function () {
-
-      if (REDUCED) return;
-
-      function spawn() {
+      function spawn(x, y, big) {
         const nova = document.createElement("div");
         nova.className = "supernova";
-        nova.style.left = (Math.random() * window.innerWidth) + "px";
-        nova.style.top = (Math.random() * window.innerHeight * .8) + "px";
-
-        nova.addEventListener("animationend", function () {
-          nova.remove();
-        });
-
+        nova.style.left = (x != null ? x : Math.random() * window.innerWidth) + "px";
+        nova.style.top = (y != null ? y : Math.random() * window.innerHeight * .8) + "px";
+        if (big) {
+          nova.style.transform = "scale(2.2)";
+        }
+        nova.addEventListener("animationend", function () { nova.remove(); });
         document.body.appendChild(nova);
       }
 
-      function scheduleNext() {
-        const delay = 6000 + Math.random() * 9000;
-        setTimeout(function () {
-          spawn();
-          scheduleNext();
-        }, delay);
-      }
-
-      scheduleNext();
-
-    })();
-
-
-    /* =========================================================
-       MAGNETIC BUTTON — nút hơi "hút" theo con trỏ khi rê gần
-    ========================================================= */
-
-    (function () {
+      /* Chùm sao bùng sáng lớn — dùng cho khoảnh khắc ăn mừng (ví dụ gửi liên hệ thành công) */
+      window.__triggerSupernovaBurst = function (cx, cy) {
+        const centerX = cx != null ? cx : window.innerWidth / 2;
+        const centerY = cy != null ? cy : window.innerHeight / 2;
+        const count = 6;
+        for (let i = 0; i < count; i++) {
+          setTimeout(function () {
+            const angle = Math.random() * Math.PI * 2;
+            const dist = 40 + Math.random() * 160;
+            spawn(centerX + Math.cos(angle) * dist, centerY + Math.sin(angle) * dist, i === 0);
+          }, i * 120);
+        }
+      };
 
       if (REDUCED) return;
+      function scheduleNext() {
+        const delay = 6000 + Math.random() * 9000;
+        setTimeout(function () { spawn(); scheduleNext(); }, delay);
+      }
+      scheduleNext();
+    })();
 
+    /* MAGNETIC BUTTON */
+    (function () {
+      if (REDUCED) return;
       const buttons = document.querySelectorAll(".btn");
-
       buttons.forEach(function (btn) {
-
         btn.addEventListener("mousemove", function (e) {
           const rect = btn.getBoundingClientRect();
           const relX = e.clientX - (rect.left + rect.width / 2);
           const relY = e.clientY - (rect.top + rect.height / 2);
-
-          // Gộp thêm hiệu ứng "nhấc lên" -2px để không bị mất hiệu ứng hover gốc
-          btn.style.transform =
-            `translate(${(relX * .18).toFixed(1)}px, ${(relY * .28 - 2).toFixed(1)}px)`;
+          btn.style.transform = `translate(${(relX * .18).toFixed(1)}px, ${(relY * .28 - 2).toFixed(1)}px)`;
         });
-
-        btn.addEventListener("mouseleave", function () {
-          btn.style.transform = "translate(0,0)";
-        });
-
+        btn.addEventListener("mouseleave", function () { btn.style.transform = "translate(0,0)"; });
       });
-
     })();
 
-
-    /* =========================================================
-       CASE STUDY MODAL
-    ========================================================= */
-
+    /* CASE STUDY MODAL */
     (function () {
-
       const overlay = document.getElementById("caseStudyOverlay");
       if (!overlay) return;
-
       const closeBtn = document.getElementById("caseStudyClose");
       const fields = {
-        id: document.getElementById("csId"),
-        title: document.getElementById("csTitle"),
-        problem: document.getElementById("csProblem"),
-        approach: document.getElementById("csApproach"),
-        result: document.getElementById("csResult"),
-        lesson: document.getElementById("csLesson")
+        id: document.getElementById("csId"), title: document.getElementById("csTitle"),
+        problem: document.getElementById("csProblem"), approach: document.getElementById("csApproach"),
+        result: document.getElementById("csResult"), lesson: document.getElementById("csLesson")
       };
-
       function openModal(btn) {
         fields.id.textContent = btn.dataset.id || "";
         fields.title.textContent = btn.dataset.title || "";
@@ -6689,16 +5410,13 @@
         fields.approach.textContent = btn.dataset.approach || "";
         fields.result.textContent = btn.dataset.result || "";
         fields.lesson.textContent = btn.dataset.lesson || "";
-
         overlay.classList.add("open");
-        document.body.classList.add("menu-open"); // tái dùng class có sẵn để khoá scroll nền
+        document.body.classList.add("menu-open");
       }
-
       function closeModal() {
         overlay.classList.remove("open");
         document.body.classList.remove("menu-open");
       }
-
       document.querySelectorAll(".case-study-btn").forEach(function (btn) {
         btn.addEventListener("click", function (e) {
           e.preventDefault();
@@ -6706,71 +5424,225 @@
           openModal(btn);
         });
       });
-
       closeBtn.addEventListener("click", closeModal);
-
-      overlay.addEventListener("click", function (e) {
-        if (e.target === overlay) closeModal();
-      });
-
+      overlay.addEventListener("click", function (e) { if (e.target === overlay) closeModal(); });
       window.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" && overlay.classList.contains("open")) {
-          closeModal();
-        }
+        if (e.key === "Escape" && overlay.classList.contains("open")) closeModal();
       });
+    })();
 
+    /* CONSTELLATION — sao hội tụ thành chữ "Npv" dùng font script thật (Great Vibes) */
+    (function () {
+      const canvas = document.getElementById("constellationCanvas");
+      const section = document.getElementById("about");
+      if (!canvas || !section) return;
+      /* Không return sớm theo bề rộng nữa — để CSS lo việc ẩn trên màn hình nhỏ,
+         tránh trường hợp DevTools mở làm hẹp viewport khiến hiệu ứng không bao giờ chạy */
+
+      const ctx = canvas.getContext("2d");
+      let W, H;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      let stars = [];
+      let currentFontSize = 200;
+
+      /* Vẽ chữ bằng font script thật lên canvas ẩn, rồi lấy các điểm ảnh có mực
+         làm vị trí đích cho từng ngôi sao — nét chữ sẽ đúng y hệt font đẹp thật. */
+      function samplePointsFromText(text, fontSize, maxPointsCap) {
+        if (!fontSize || fontSize < 4 || !isFinite(fontSize)) {
+          return { pts: [], width: 0, height: 0 };
+        }
+        const width = Math.max(1, Math.round(fontSize * 1.5));
+        const height = Math.max(1, Math.round(fontSize * 1.5));
+        const off = document.createElement("canvas");
+        off.width = width;
+        off.height = height;
+        const octx = off.getContext("2d");
+        octx.fillStyle = "#fff";
+        octx.font = Math.round(fontSize) + 'px "Great Vibes", cursive';
+        octx.textAlign = "center";
+        octx.textBaseline = "middle";
+        octx.fillText(text, width / 2, height / 2 + fontSize * 0.05);
+        octx.lineWidth = Math.max(1, fontSize * 0.02);
+        octx.strokeStyle = "#fff";
+        octx.strokeText(text, width / 2, height / 2 + fontSize * 0.05);
+
+        const imgData = octx.getImageData(0, 0, width, height).data;
+        const step = Math.max(1.5, Math.round(fontSize / 55));
+        let pts = [];
+        for (let y = 0; y < height; y += step) {
+          for (let x = 0; x < width; x += step) {
+            const idx = (y * width + x) * 4;
+            if (imgData[idx + 3] > 100) pts.push([x, y]);
+          }
+        }
+        /* Giới hạn số điểm để hoạt ảnh mượt, không quá nặng máy */
+        const MAX_POINTS = maxPointsCap || 160;
+        if (pts.length > MAX_POINTS) {
+          const stride = Math.ceil(pts.length / MAX_POINTS);
+          pts = pts.filter(function (_, i) { return i % stride === 0; });
+        }
+        return { pts: pts, width: width, height: height };
+      }
+
+      /* 3 chữ N · P · V tách riêng, mỗi chữ một font-size hơi khác nhau,
+         đặt ở vị trí lệch nhau trong khung — không cần nằm thẳng hàng */
+      const letterLayout = [
+        { ch: "N", xRatio: 0.22, yRatio: 0.36, sizeMul: 1.0 },
+        { ch: "P", xRatio: 0.52, yRatio: 0.64, sizeMul: 0.92 },
+        { ch: "V", xRatio: 0.8, yRatio: 0.3, sizeMul: 1.06 }
+      ];
+
+      function buildPoints() {
+        if (!W || !H || W <= 0 || H <= 0) {
+          stars = [];
+          return;
+        }
+        const baseFontSize = Math.max(24, Math.min(190, Math.min(W, H) * 0.2));
+        currentFontSize = baseFontSize;
+
+        const newStars = [];
+        letterLayout.forEach(function (L) {
+          const fontSize = baseFontSize * L.sizeMul;
+          const sampled = samplePointsFromText(L.ch, fontSize, 150);
+          const cx = W * L.xRatio;
+          const cy = H * L.yRatio;
+          const offsetX = cx - sampled.width / 2;
+          const offsetY = cy - sampled.height / 2;
+
+          sampled.pts.forEach(function ([x, y]) {
+            newStars.push({
+              x: Math.random() * W,
+              y: Math.random() * H,
+              tx: offsetX + x,
+              ty: offsetY + y,
+              letter: L.ch,
+              phase: Math.random() * Math.PI * 2
+            });
+          });
+        });
+        stars = newStars;
+      }
+
+      function resize() {
+        const rect = section.getBoundingClientRect();
+        W = canvas.width = rect.width * dpr;
+        H = canvas.height = rect.height * dpr;
+        canvas.style.width = rect.width + "px";
+        canvas.style.height = rect.height + "px";
+        buildPoints();
+      }
+      window.addEventListener("resize", resize);
+      resize();
+      console.log("[constellation] khởi tạo, số sao:", stars.length, "W:", W, "H:", H);
+
+      /* Cho hiện ngay bằng font dự phòng, không chờ mạng tải Great Vibes.
+         Nếu Great Vibes tải xong sau đó thì nâng cấp lại nét chữ cho đẹp hơn. */
+      const fontLoadSize = Math.max(48, Math.min(window.innerWidth, window.innerHeight) * 0.3);
+      if (document.fonts && document.fonts.load) {
+        document.fonts.load(fontLoadSize + 'px "Great Vibes"').then(function () {
+          console.log("[constellation] font Great Vibes đã tải xong, cập nhật lại nét chữ");
+          buildPoints();
+        }).catch(function (err) {
+          console.warn("[constellation] không tải được font Great Vibes, dùng font dự phòng", err);
+        });
+      }
+
+      let progress = 0;
+      let target = 0;
+
+      const io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            target = 1;
+            canvas.classList.add("show");
+            console.log("[constellation] About section vào khung nhìn — bắt đầu hội tụ, số sao:", stars.length);
+          } else {
+            target = 0;
+            setTimeout(function () {
+              if (target === 0) canvas.classList.remove("show");
+            }, 900);
+          }
+        });
+      }, { threshold: 0.25 });
+      io.observe(section);
+
+      function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+      function draw() {
+        if (!REDUCED && stars.length) {
+          ctx.clearRect(0, 0, W, H);
+          progress += (target - progress) * 0.012;
+          const p = easeOutCubic(Math.max(0, Math.min(1, progress)));
+
+          stars.forEach(function (s) {
+            s._cx = s.x + (s.tx - s.x) * p;
+            s._cy = s.y + (s.ty - s.y) * p;
+          });
+
+          /* Nối các điểm gần nhau để tạo cảm giác chòm sao — chỉ nối trong cùng 1 chữ */
+          ctx.lineWidth = 0.8;
+          ctx.strokeStyle = "rgba(124,140,255," + (0.16 * p) + ")";
+          const maxDist = currentFontSize * 0.09;
+          for (let i = 0; i < stars.length; i++) {
+            for (let j = i + 1; j < stars.length; j++) {
+              if (stars[i].letter !== stars[j].letter) continue;
+              const dx = stars[i]._cx - stars[j]._cx;
+              const dy = stars[i]._cy - stars[j]._cy;
+              const d2 = dx * dx + dy * dy;
+              if (d2 < maxDist * maxDist) {
+                ctx.beginPath();
+                ctx.moveTo(stars[i]._cx, stars[i]._cy);
+                ctx.lineTo(stars[j]._cx, stars[j]._cy);
+                ctx.stroke();
+              }
+            }
+          }
+
+          stars.forEach(function (s) {
+            s.phase += 0.02;
+            const tw = 0.6 + Math.sin(s.phase) * 0.4;
+            const alpha = (0.28 + 0.62 * p) * tw;
+            ctx.beginPath();
+            ctx.fillStyle = "rgba(255,255,255," + alpha + ")";
+            ctx.arc(s._cx, s._cy, 1.3, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
     })();
 
 
-    /* =========================================================
-       TEL LINKS — copy số điện thoại làm phương án dự phòng
-       (nhiều máy tính không có app gọi điện nên tel: sẽ im lặng)
-    ========================================================= */
+
 
     (function () {
-
       const toast = document.getElementById("cvToast");
       if (!toast) return;
-
       let hideTimer = null;
-
       function showToast(iconEl, textEl) {
         const icon = toast.querySelector(".cv-toast-icon");
         const text = toast.querySelector(".cv-toast-text");
-
         if (icon) icon.textContent = iconEl;
         if (text) text.textContent = textEl;
-
         toast.classList.add("show");
-
         clearTimeout(hideTimer);
-        hideTimer = setTimeout(function () {
-          toast.classList.remove("show");
-        }, 3200);
+        hideTimer = setTimeout(function () { toast.classList.remove("show"); }, 3200);
       }
-
-      window.__showToast = showToast; // dùng chung cho các phần khác nếu cần
-
+      window.__showToast = showToast;
       document.querySelectorAll('a[href^="tel:"]').forEach(function (link) {
         link.addEventListener("click", function () {
           const number = link.getAttribute("href").replace("tel:", "");
-
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(number).then(function () {
               showToast("📋", "Đã copy số điện thoại: " + number + " — dán để gọi hoặc nhắn tin.");
-            }).catch(function () {
-              showToast("☎", "Số điện thoại: " + number);
-            });
-          } else {
-            showToast("☎", "Số điện thoại: " + number);
-          }
+            }).catch(function () { showToast("☎", "Số điện thoại: " + number); });
+          } else { showToast("☎", "Số điện thoại: " + number); }
         });
       });
-
     })();
-
   </script>
 
 </body>
 </html>
-
